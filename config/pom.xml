@@ -20,11 +20,11 @@
   <parent>
     <groupId>org.onehippo.cms7</groupId>
     <artifactId>hippo-ckeditor</artifactId>
-    <version>4.7.1-h12.3.0-SNAPSHOT</version>
+    <version>4.7.1-h12.3.0</version>
   </parent>
 
   <artifactId>hippo-ckeditor-config</artifactId>
-  <version>4.7.1-h12.3.0-SNAPSHOT</version>
+  <version>4.7.1-h12.3.0</version>
   <packaging>jar</packaging>
 
   <name>Hippo CKEditor Config</name>
