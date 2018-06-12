@@ -71,7 +71,7 @@ cp -r ../../node_modules/ckeditor-youtube-plugin/youtube ../../plugins/
 JAVA_ARGS=${ARGS// -t / } # Remove -t from args
 REVISION=$(git rev-parse --verify --short HEAD)
 
-java -jar ckbuilder/$CKBUILDER_VERSION/ckbuilder.jar --build ../../ release $JAVA_ARGS --version="$VERSION" --revision="$REVISION" --overwrite --skip-omitted-in-build-config
+java -jar ckbuilder/$CKBUILDER_VERSION/ckbuilder.jar --build ../../ release $JAVA_ARGS --version="$VERSION" --revision="$REVISION" --overwrite --skip-omitted-in-build-config --no-tar
 
 # Copy and build tests.
 if [[ "$ARGS" == *\ \-t\ * ]]; then
