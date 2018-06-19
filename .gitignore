@@ -29,3 +29,12 @@ bender-*.log
 
 !.github/*
 .DS_Store
+
+
+# Hippo-specific additions
+*.iml
+target/
+plugins/codemirror/
+plugins/textselection/
+plugins/wordcount/
+plugins/youtube/

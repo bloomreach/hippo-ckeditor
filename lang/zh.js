@@ -5,7 +5,7 @@
 
 /**
  * @fileOverview Defines the {@link CKEDITOR.lang} object, for the
- * Chinese Traditional language.
+ * Chinese Simplified language.
  */
 
 /**#@+
@@ -17,89 +17,89 @@
  * Contains the dictionary of language entries.
  * @namespace
  */
-CKEDITOR.lang[ 'zh' ] = {
+CKEDITOR.lang[ 'zh-cn' ] = {
 	// ARIA description.
-	editor: 'RTF 編輯器',
-	editorPanel: 'RTF 編輯器面板',
+	editor: '所见即所得编辑器',
+	editorPanel: '所见即所得编辑器面板',
 
 	// Common messages and labels.
 	common: {
 		// Screenreader titles. Please note that screenreaders are not always capable
 		// of reading non-English words. So be careful while translating it.
-		editorHelp: '按下 ALT 0 取得說明。',
+		editorHelp: '按 ALT+0 获得帮助',
 
-		browseServer: '瀏覽伺服器',
+		browseServer: '浏览服务器',
 		url: 'URL',
-		protocol: '通訊協定',
-		upload: '上傳',
-		uploadSubmit: '傳送至伺服器',
-		image: '圖像',
+		protocol: '协议',
+		upload: '上传',
+		uploadSubmit: '上传到服务器',
+		image: '图像',
 		flash: 'Flash',
-		form: '表格',
-		checkbox: '核取方塊',
-		radio: '選項按鈕',
-		textField: '文字欄位',
-		textarea: '文字區域',
-		hiddenField: '隱藏欄位',
-		button: '按鈕',
-		select: '選取欄位',
-		imageButton: '影像按鈕',
-		notSet: '<未設定>',
+		form: '表单',
+		checkbox: '复选框',
+		radio: '单选按钮',
+		textField: '单行文本',
+		textarea: '多行文本',
+		hiddenField: '隐藏域',
+		button: '按钮',
+		select: '列表/菜单',
+		imageButton: '图像按钮',
+		notSet: '<没有设置>',
 		id: 'ID',
-		name: '名稱',
-		langDir: '語言方向',
-		langDirLtr: '由左至右 (LTR)',
-		langDirRtl: '由右至左 (RTL)',
-		langCode: '語言代碼',
-		longDescr: '完整描述 URL',
-		cssClass: '樣式表類別',
-		advisoryTitle: '標題',
-		cssStyle: '樣式',
-		ok: '確定',
+		name: '名称',
+		langDir: '语言方向',
+		langDirLtr: '从左到右 (LTR)',
+		langDirRtl: '从右到左 (RTL)',
+		langCode: '语言代码',
+		longDescr: '详细说明 URL',
+		cssClass: '样式类名称',
+		advisoryTitle: '标题',
+		cssStyle: '行内样式',
+		ok: '确定',
 		cancel: '取消',
-		close: '關閉',
-		preview: '預覽',
-		resize: '調整大小',
-		generalTab: '一般',
-		advancedTab: '進階',
-		validateNumberFailed: '此值不是數值。',
-		confirmNewPage: '現存的修改尚未儲存，要開新檔案？',
-		confirmCancel: '部份選項尚未儲存，要關閉對話框？',
-		options: '選項',
-		target: '目標',
-		targetNew: '開新視窗 (_blank)',
-		targetTop: '最上層視窗 (_top)',
-		targetSelf: '相同視窗 (_self)',
-		targetParent: '父視窗 (_parent)',
-		langDirLTR: '由左至右 (LTR)',
-		langDirRTL: '由右至左 (RTL)',
-		styles: '樣式',
-		cssClasses: '樣式表類別',
-		width: '寬度',
+		close: '关闭',
+		preview: '预览',
+		resize: '拖拽以改变大小',
+		generalTab: '常规',
+		advancedTab: '高级',
+		validateNumberFailed: '需要输入数字格式',
+		confirmNewPage: '当前文档内容未保存，是否确认新建文档？',
+		confirmCancel: '部分修改尚未保存，是否确认关闭对话框？',
+		options: '选项',
+		target: '目标窗口',
+		targetNew: '新窗口 (_blank)',
+		targetTop: '整页 (_top)',
+		targetSelf: '本窗口 (_self)',
+		targetParent: '父窗口 (_parent)',
+		langDirLTR: '从左到右 (LTR)',
+		langDirRTL: '从右到左 (RTL)',
+		styles: '样式',
+		cssClasses: '样式类',
+		width: '宽度',
 		height: '高度',
-		align: '對齊方式',
-		left: '靠左對齊',
-		right: '靠右對齊',
-		center: '置中對齊',
-		justify: '左右對齊',
+		align: '对齐方式',
+		left: '左对齐',
+		right: '右对齐',
+		center: '居中',
+		justify: '两端对齐',
 		alignLeft: '靠左對齊',
 		alignRight: '靠右對齊',
 		alignCenter: 'Align Center', // MISSING
-		alignTop: '頂端',
-		alignMiddle: '中間對齊',
-		alignBottom: '底端',
-		alignNone: '無',
-		invalidValue: '無效值。',
-		invalidHeight: '高度必須為數字。',
-		invalidWidth: '寬度必須為數字。',
+		alignTop: '顶端',
+		alignMiddle: '居中',
+		alignBottom: '底部',
+		alignNone: '无',
+		invalidValue	: '无效的值。',
+		invalidHeight: '高度必须为数字格式',
+		invalidWidth: '宽度必须为数字格式',
 		invalidLength: '為「%1」欄位指定的值必須為正值，可包含或不包含測量單位（%2）。',
-		invalidCssLength: '「%1」的值應為正數，並可包含有效的 CSS 單位 (px, %, in, cm, mm, em, ex, pt, 或 pc)。',
-		invalidHtmlLength: '「%1」的值應為正數，並可包含有效的 HTML 單位 (px 或 %)。',
-		invalidInlineStyle: '行內樣式的值應包含一個以上的變數值組，其格式如「名稱:值」，並以分號區隔之。',
-		cssLengthTooltip: '請輸入數值，單位是像素或有效的 CSS 單位 (px, %, in, cm, mm, em, ex, pt, 或 pc)。',
+		invalidCssLength: '此“%1”字段的值必须为正数，可以包含或不包含一个有效的 CSS 长度单位(px, %, in, cm, mm, em, ex, pt 或 pc)',
+		invalidHtmlLength: '此“%1”字段的值必须为正数，可以包含或不包含一个有效的 HTML 长度单位(px 或 %)',
+		invalidInlineStyle: '内联样式必须为格式是以分号分隔的一个或多个“属性名 : 属性值”。',
+		cssLengthTooltip: '输入一个表示像素值的数字，或加上一个有效的 CSS 长度单位(px, %, in, cm, mm, em, ex, pt 或 pc)。',
 
 		// Put the voice-only part of the label in the span.
-		unavailable: '%1<span class="cke_accessibility">，無法使用</span>',
+		unavailable: '%1<span class="cke_accessibility">，不可用</span>',
 
 		// Keyboard keys translations used for creating shortcuts descriptions in tooltips, context menus and ARIA labels.
 		keyboard: {
@@ -135,12 +135,11 @@ CKEDITOR.lang[ 'zh' ] = {
 			132: 'F21',
 			133: 'F22',
 			134: 'F23',
-			135: 'F24',
-			224: 'Command 鍵'
+			135: 'F24',224: 'Command 鍵'
 		},
 
-		// Prepended to ARIA labels with shortcuts.
-		keyboardShortcut: '鍵盤快捷鍵',
+    // Prepended to ARIA labels with shortcuts.
+    keyboardShortcut: '鍵盤快捷鍵',
 
 		optionDefault: '預設'
 	}

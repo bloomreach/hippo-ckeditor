@@ -17,6 +17,13 @@ MSG_UPDATE_FAILED="Warning: The attempt to update ckbuilder.jar failed. The exis
 MSG_DOWNLOAD_FAILED="It was not possible to download ckbuilder.jar."
 ARGS=" $@ "
 
+if [ $# -ne 1 ]; then
+  echo "usage: $0 <build version>"
+  exit 1
+fi
+
+VERSION="$1"
+
 function error_exit
 {
 	echo "${PROGNAME}: ${1:-"Unknown Error"}" 1>&2
@@ -55,22 +62,16 @@ cd ../..
 echo ""
 echo "Starting CKBuilder..."
 
-JAVA_ARGS=${ARGS// -t / } # Remove -t from args.
+echo "Copy external plugins from node_modules..."
+cp -r ../../node_modules/hippo-ckeditor-codemirror-plugin/codemirror ../../plugins/
+cp -r ../../node_modules/hippo-ckeditor-textselection-plugin/textselection ../../plugins/
+cp -r ../../node_modules/hippo-ckeditor-wordcount-plugin/wordcount ../../plugins/
+cp -r ../../node_modules/ckeditor-youtube-plugin/youtube ../../plugins/
 
-VERSION=$(grep '"version":' ./../../package.json | sed $'s/[\t\",: ]//g; s/version//g' | tr -d '[[:space:]]')
+JAVA_ARGS=${ARGS// -t / } # Remove -t from args
 REVISION=$(git rev-parse --verify --short HEAD)
 
-# If the current revision is not tagged with any CKE version, it means it's a "dirty" build. We
-# mark such builds with a " DEV" suffix. true is needed because of "set -e".
-TAG=$(git tag --points-at HEAD) || true
-
-# This fancy construction check str length of $TAG variable.
-if [ ${#TAG} -le 0 ];
-then
-	VERSION="$VERSION DEV"
-fi
-
-java -jar ckbuilder/$CKBUILDER_VERSION/ckbuilder.jar --build ../../ release $JAVA_ARGS --version="$VERSION" --revision="$REVISION" --overwrite
+java -jar ckbuilder/$CKBUILDER_VERSION/ckbuilder.jar --build ../../ release $JAVA_ARGS --version="$VERSION" --revision="$REVISION" --overwrite --skip-omitted-in-build-config
 
 # Copy and build tests.
 if [[ "$ARGS" == *\ \-t\ * ]]; then
@@ -86,6 +87,9 @@ if [[ "$ARGS" == *\ \-t\ * ]]; then
 
 	(cd release/ckeditor &&	npm install && bender init)
 fi
+
+echo "Copy icons of codemirror plugin..."
+cp -r ../../plugins/codemirror/icons release/ckeditor/plugins/codemirror
 
 echo ""
 echo "Release created in the \"release\" directory."

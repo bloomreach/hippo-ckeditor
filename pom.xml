@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2014-2018 Hippo B.V. (http://www.onehippo.com)
+  For licensing, see LICENSE.md or http://ckeditor.com/license
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.onehippo.cms7</groupId>
+    <artifactId>hippo-cms7-project</artifactId>
+    <version>29.4</version>
+    <relativePath />
+  </parent>
+
+  <name>Hippo CKEditor</name>
+  <description>CKEditor for Hippo CMS</description>
+  <artifactId>hippo-ckeditor</artifactId>
+  <version>4.7.1-h12.4.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <scm>
+    <connection>scm:git:git@code.onehippo.org:cms-community/hippo-ckeditor.git</connection>
+    <developerConnection>scm:git:git@code.onehippo.org:cms-community/hippo-ckeditor.git</developerConnection>
+    <url>https://code.onehippo.org/cms-community/hippo-ckeditor</url>
+    <tag>HEAD</tag>
+  </scm>
+  <repositories>
+    <repository>
+        <id>hippo</id>
+        <name>Hippo Maven 2</name>
+        <url>https://maven.onehippo.com/maven2/</url>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+        <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+    </repository>
+  </repositories>
+
+  <build>
+    <defaultGoal>package</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <inherited>false</inherited>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>node_modules</directory>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+            <fileset>
+              <directory>plugins/codemirror</directory>
+              <directory>plugins/textselection</directory>
+              <directory>plugins/youtube</directory>
+              <directory>plugins/wordcount</directory>
+            </fileset>
+            <fileset>
+              <directory>dev/builder/release</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>npm</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>npm</executable>
+              <commandlineArgs>install --prod</commandlineArgs>
+            </configuration>
+          </execution>
+          <execution>
+            <id>ckbuilder</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>dev/builder/build.sh</executable>
+              <commandlineArgs>${project.version}</commandlineArgs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>assemble-optimized</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>${basedir}/maven-distribution-optimized.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+          <execution>
+            <id>assemble-sources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>${basedir}/maven-distribution-sources.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <modules>
+    <module>config</module>
+  </modules>
+
+</project>

@@ -1,4 +1,110 @@
-# CKEditor 4 - The best browser-based WYSIWYG editor
+# CKEditor 4 for Hippo CMS
+
+## Hippo-specific modifications
+
+This repository contains Hippo-specific modifications of CKEditor 4.
+The build includes only the plugins used in Hippo CMS (see dev/builder/build-config.js).
+
+### External plugins
+
+The following external plugins are included:
+
+  - [codemirror](https://github.com/onehippo/CKEditor-CodeMirror-Plugin)
+  - [textselection](https://github.com/onehippo/CKEditor-TextSelection-Plugin)
+  - [wordcount](https://github.com/onehippo/CKEditor-WordCount-Plugin)
+  - [youtube](https://github.com/onehippo/ckeditor-youtube-plugin)
+
+## Versions
+
+A Hippo-specific CKEditor build adds a semantic version to the CKEditor version it extends, prefixed with `-h`.
+The major and minor number of this additional version match the Hippo release in which the CKEditor build is used. 
+For example, version `4.7.1-h12.1.0` extends CKEditor `4.7.1` and is used in Hippo release `12.1`. The patch number 
+(`0` in this example) is used to version the Hippo-specific CKEditor changes in that branch.  
+
+Each branch `hippo/<version>` contains all commits in the CKEditor branch `release/<version>` plus all Hippo-specific 
+modifications. 
+
+There can be separate maintenance branches that contain Hippo-specific modifications limited to a specific Hippo 
+release. For example, the branch `hippo/release/12.0` would contain the Hippo CKEditor version for Hippo 12.0. The 
+`hippo/<version>` branch acts as the `master` branch for the next Hippo release.   
+
+A release is available in a tag are named `hippo/<version>`, e.g. `hippo/4.7.1-h12.1.0`. 
+
+The script `/dev/builder/build.sh` needs a 'build version' parameter, which is burned into the generated code.
+Hippo CMS uses the same version number as in the tag name (e.g. '4.7.1-h12.1.0').
+
+Note that the version scheme of Hippo CKEditor changed over time. Until Hippo 11.x, the CKEditor version was extended 
+with a single nano patch version prefixed with `-h` (e.g. `4.3.0-h1`). Hippo 12.x introduced the semantic Hippo-specific
+version and the maintenance branches.
+
+### Upstream changes
+
+To get upstream changes, first add a remote for the upstream CKEditor repository:
+
+    git remote add -f upstream https://github.com/ckeditor/ckeditor-dev.git
+
+Upstream changes can now be merged into the current hippo-specific branch. Make sure to merge the upstream branch
+with the same version number. For example:
+
+    git fetch upstream
+    git checkout hippo/4.3.x
+    git merge upstream/release/4.3.x
+
+When a new patch version is released upstream, its tag can be merged into the matching hippo-specific branch.
+For example, to merge upstream tag 4.4.5:
+
+    git fetch upstream
+    git checkout hippo/4.4.x
+    git merge 4.4.5
+
+When a new minor version is released upstream, a new hippo-specific branch should be created based on the upstream
+branch. All hippo-specific customizations in the previous branch can then be merged into the new one. The new
+branch must be pushed to origin, so other people can fetch it too. For example, to upgrade from 4.3.x to 4.4.x:
+
+    git fetch upstream
+    git checkout release/4.4.x
+    git checkout -b hippo/4.4.x
+    git merge hippo/4.3.x
+    git push origin hippo/4.4.x
+
+### Deployment to Nexus
+
+Prerequisites:
+
+  - [NodeJS (6.x.x)](https://nodejs.org/)
+  - [npm](https://www.npmjs.com/)
+  - [Maven](http://maven.apache.org/)
+
+Deployment command:
+
+    mvn clean deploy
+
+## External plugin management
+
+Only a part of each external plugin's code has to be included in the Hippo CKEditor build,
+i.e. the part that should to into the CKEditor subdirectory `plugins/XXX`.
+
+The Maven build makes sure the dependencies are pulled in via node package manager (npm) and then copied to
+the plugins directory using npm and the `dev/builder/build.sh` script.
+
+### Adding a new external plugin
+
+Adding an external plugin can be done by including them in the `dependencies`
+property of the `package.json.` If the external plugin does not contain a (valid)
+`package.json` file then you need to fork the github repository under the onehippo
+github group and add the `package.json` yourself.
+
+Make sure to copy the plugin code from `node_modules/` to `plugins/` in `dev/builder/build.sh`.
+Add the plugin to the configuration of the Maven clean plugin in `pom.xml` so the copied sources 
+will be cleaned too.
+
+### Updating an external plugin
+
+Updating an external plugin can be done by publishing a new version of the
+plugin (see that plugin's README) to the hippo npm registry and then bumping to that version in the
+`package.json`.
+
+## The remainder of this file contains the unmodified CKEditor README
 
 [![devDependencies Status](https://david-dm.org/ckeditor/ckeditor-dev/dev-status.svg)](https://david-dm.org/ckeditor/ckeditor-dev?type=dev)
 

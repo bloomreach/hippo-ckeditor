@@ -107,6 +107,8 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 		// @param {String} src.
 		// @param {Function} callback.
 		return function( src, callback, scope ) {
+			var srcUrl;
+
 			addListener( 'load', function() {
 				// Don't use image.$.(width|height) since it's buggy in IE9-10 (https://dev.ckeditor.com/ticket/11159)
 				var dimensions = getNatural( image );
@@ -122,8 +124,13 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 				callback( null );
 			} );
 
-			image.setAttribute( 'src',
-				( config.baseHref || '' ) + src + '?' + Math.random().toString( 16 ).substring( 2 ) );
+			try {
+				srcUrl = new URL(( config.baseHref || '' ) + src + '?' + Math.random().toString( 16 ).substring( 2 ));
+				image.setAttribute( 'src', srcUrl.toString());
+			} catch (e) {
+				// invalid URL
+				callback( null );
+			}
 		};
 	}
 
