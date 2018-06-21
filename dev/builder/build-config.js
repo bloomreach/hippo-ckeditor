@@ -116,7 +116,6 @@ var CKBUILDER_CONFIG = {
 		textselection: 1,
 		toolbar: 1,
 		undo: 1,
-		uploadimage: 1,
 		widget: 1,
 		wordcount: 1,
 		wysiwygarea: 1,
