@@ -16,7 +16,7 @@
   <name>Hippo CKEditor</name>
   <description>CKEditor for Hippo CMS</description>
   <artifactId>hippo-ckeditor</artifactId>
-  <version>4.7.1-h12.4.0-SNAPSHOT</version>
+  <version>4.9.2-h12.5.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <scm>
