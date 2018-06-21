@@ -1,4 +1,4 @@
-/* bender-tags: editor,unit */
+/* bender-tags: editor */
 
 ( function() {
 	'use strict';
@@ -36,7 +36,7 @@
 			assert.isTrue( cmdCalled, 'Command should be called' );
 		},
 
-		// http://dev.ckeditor.com/ticket/17027
+		// https://dev.ckeditor.com/ticket/17027
 		'test default event data value': function() {
 			var beforeExecData;
 

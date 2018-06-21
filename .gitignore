@@ -20,6 +20,7 @@ samples/toolbarconfigurator/.bender/**
 samples/toolbarconfigurator/node_modules/**
 samples/toolbarconfigurator/docs/**
 
+tests/security
 tests/plugins/mathjax/_assets/mathjax/**
 
 *.css.map
@@ -28,6 +29,7 @@ bender-*.log
 
 !.github/*
 .DS_Store
+
 
 # Hippo-specific additions
 *.iml

@@ -1,6 +1,6 @@
 /**
- * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
 'use strict';
@@ -89,7 +89,7 @@
 						block = e;
 
 					if ( pathBlockLimitElements[ elementName ] ) {
-						// End level DIV is considered as the block, if no block is available. (http://dev.ckeditor.com/ticket/525)
+						// End level DIV is considered as the block, if no block is available. (https://dev.ckeditor.com/ticket/525)
 						// But it must NOT be the root element (checked above).
 						if ( !block && elementName == 'div' && !checkHasBlock( e ) )
 							block = e;
@@ -186,7 +186,9 @@ CKEDITOR.dom.elementPath.prototype = {
 	 * @returns {CKEDITOR.dom.element} The first matched dom element or `null`.
 	 */
 	contains: function( query, excludeRoot, fromTop ) {
-		var evaluator;
+		var i = 0,
+			evaluator;
+
 		if ( typeof query == 'string' )
 			evaluator = function( node ) {
 				return node.getName() == query;
@@ -208,14 +210,21 @@ CKEDITOR.dom.elementPath.prototype = {
 
 		var elements = this.elements,
 			length = elements.length;
-		excludeRoot && length--;
+
+		if ( excludeRoot ) {
+			if ( !fromTop ) {
+				length -= 1;
+			} else {
+				i += 1;
+			}
+		}
 
 		if ( fromTop ) {
 			elements = Array.prototype.slice.call( elements, 0 );
 			elements.reverse();
 		}
 
-		for ( var i = 0; i < length; i++ ) {
+		for ( ; i < length; i++ ) {
 			if ( evaluator( elements[ i ] ) )
 				return elements[ i ];
 		}

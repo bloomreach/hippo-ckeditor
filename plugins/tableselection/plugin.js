@@ -1,20 +1,24 @@
 /**
- * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
 ( function() {
 	'use strict';
 
 	var fakeSelectedClass = 'cke_table-faked-selection',
-		fakeSelectedTableClass = fakeSelectedClass + '-table',
 		fakeSelectedEditorClass = fakeSelectedClass + '-editor',
+		fakeSelectedTableDataAttribute = 'cke-table-faked-selection-table',
 		fakeSelection = { active: false },
 		tabletools,
 		getSelectedCells,
 		getCellColIndex,
 		insertRow,
 		insertColumn;
+
+	function isWidget( element ) {
+		return CKEDITOR.plugins.widget && CKEDITOR.plugins.widget.isDomWidget( element );
+	}
 
 	function getCellsBetween( first, last ) {
 		var firstTable = first.getAscendant( 'table' ),
@@ -29,10 +33,6 @@
 			i,
 			j,
 			cell;
-
-		function getRowIndex( rowOrCell ) {
-			return rowOrCell.getAscendant( 'tr', true ).$.rowIndex;
-		}
 
 		// Support selection that began in outer's table, but ends in nested one.
 		if ( firstTable.contains( lastTable ) ) {
@@ -90,17 +90,24 @@
 		return cells;
 	}
 
-	// Detects if the left mouse button was pressed:
-	// * In all browsers and IE 9+ we use event.button property with standard compliant values.
-	// * In IE 8- we use event.button with IE's proprietary values.
 	function detectLeftMouseButton( evt ) {
-		var domEvent = evt.data.$;
+		return CKEDITOR.tools.getMouseButton( evt ) === CKEDITOR.MOUSE_BUTTON_LEFT;
+	}
 
-		if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 ) {
-			return domEvent.button === 1;
+	// Checks whether a given range fully contains a table element (cell/tbody/table etc).
+	// @param {CKEDITOR.dom.range} range
+	// @returns {Boolean}
+	function rangeContainsTableElement( range ) {
+		if ( range ) {
+			// Clone the range as we're going to enlarge it, and we don't want to modify the input.
+			range = range.clone();
+
+			range.enlarge( CKEDITOR.ENLARGE_ELEMENT );
+
+			var enclosedNode = range.getEnclosedNode();
+
+			return enclosedNode && enclosedNode.is && enclosedNode.is( CKEDITOR.dtd.$tableContent );
 		}
-
-		return domEvent.button === 0;
 	}
 
 	function getFakeSelectedTable( editor ) {
@@ -122,7 +129,7 @@
 		}
 
 		if ( selectedCells.count() > 0 ) {
-			selectedCells.getItem( 0 ).getAscendant( 'table' ).removeClass( fakeSelectedTableClass );
+			selectedCells.getItem( 0 ).getAscendant( 'table' ).data( fakeSelectedTableDataAttribute, false );
 		}
 
 		editor.fire( 'unlockSnapshot' );
@@ -198,14 +205,15 @@
 			return;
 		}
 
-		// We should check if the newly selected cell is still inside the same table (http://dev.ckeditor.com/ticket/17052, #493).
+		// We should check if the newly selected cell is still inside the same table (https://dev.ckeditor.com/ticket/17052, #493).
 		if ( cell && fakeSelection.first.getAscendant( 'table' ).equals( cell.getAscendant( 'table' ) ) ) {
 			cells = getCellsBetween( fakeSelection.first, cell );
 
 			// The selection is inside one cell, so we should allow native selection,
 			// but only in case if no other cell between mousedown and mouseup
 			// was selected.
-			if ( !fakeSelection.dirty && cells.length === 1 ) {
+			// We don't want to clear selection if widget is event target (#1027).
+			if ( !fakeSelection.dirty && cells.length === 1 && !( isWidget( evt.data.getTarget() ) ) ) {
 				return clearFakeCellSelection( editor, evt.name === 'mouseup' );
 			}
 
@@ -251,15 +259,24 @@
 
 		if ( cells.length > 0 ) {
 			editor.editable().addClass( fakeSelectedEditorClass );
-			cells[ 0 ].getAscendant( 'table' ).addClass( fakeSelectedTableClass );
+			cells[ 0 ].getAscendant( 'table' ).data( fakeSelectedTableDataAttribute, '' );
 		}
 
 		editor.fire( 'unlockSnapshot' );
 	}
 
+	function getRowIndex( rowOrCell ) {
+		return rowOrCell.getAscendant( 'tr', true ).$.rowIndex;
+	}
+
 	function fakeSelectionMouseHandler( evt ) {
 		// Prevent of throwing error in console if target is undefined (#515).
 		if ( !evt.data.getTarget().getName ) {
+			return;
+		}
+		// Prevent applying table selection when widget is selected.
+		// Mouseup remains a possibility to finish table selection when user release mouse button above widget in table.
+		if ( evt.name !== 'mouseup' && isWidget( evt.data.getTarget() ) ) {
 			return;
 		}
 
@@ -269,8 +286,7 @@
 			target = evt.data.getTarget(),
 			cell = target && target.getAscendant( { td: 1, th: 1 }, true ),
 			table = target && target.getAscendant( 'table', true ),
-			tableElements = { table: 1, thead: 1, tbody: 1, tfoot: 1, tr: 1, td: 1, th: 1 },
-			canClear;
+			tableElements = { table: 1, thead: 1, tbody: 1, tfoot: 1, tr: 1, td: 1, th: 1 };
 
 		// Nested tables should be treated as the same one (e.g. user starts dragging from outer table
 		// and ends in inner one).
@@ -303,7 +319,7 @@
 			return false;
 		}
 
-		if ( canClear = canClearSelection( evt, selection, selectedTable, table ) ) {
+		if ( canClearSelection( evt, selection, selectedTable, table ) ) {
 			clearFakeCellSelection( editor, true );
 		}
 
@@ -434,7 +450,7 @@
 
 	function fakeSelectionCopyCutHandler( evt ) {
 		var editor = evt.editor || evt.sender.editor,
-		selection = editor.getSelection();
+			selection = editor.getSelection();
 
 		if ( !selection.isInTable() ) {
 			return;
@@ -443,37 +459,174 @@
 		copyTable( editor, evt.name === 'cut' );
 	}
 
-	function fakeSelectionPasteHandler( evt ) {
-		var editor = evt.editor,
-			dataProcessor = editor.dataProcessor,
-			selection = editor.getSelection(),
-			tmpContainer = new CKEDITOR.dom.element( 'body' ),
-			newRowsCount = 0,
-			newColsCount = 0,
-			pastedTableColCount = 0,
-			selectedTableColCount = 0,
-			markers = {},
-			boundarySelection,
-			selectedTable,
-			selectedTableMap,
-			selectedCells,
-			pastedTable,
-			pastedTableMap,
-			firstCell,
-			startIndex,
-			firstRow,
-			lastCell,
-			endIndex,
-			lastRow,
-			currentRow,
-			prevCell,
-			cellToPaste,
-			cellToReplace,
-			i,
-			j;
+	// A helper object abstracting table selection.
+	// By calling setSelectedCells() method it will automatically determine what's
+	// the first/last cell or row.
+	//
+	// Note: ATM the type does not make an actual selection, it just holds the data.
+	//
+	// @param {CKEDITOR.dom.element[]} [cells] An array of cells considered to be selected.
+	function TableSelection( cells ) {
+		this._reset();
 
+		if ( cells ) {
+			this.setSelectedCells( cells );
+		}
+	}
+
+	TableSelection.prototype = {};
+
+	// Resets the initial state of table selection.
+	TableSelection.prototype._reset = function() {
+		this.cells = {
+			first: null,
+			last: null,
+			all: []
+		};
+
+		this.rows = {
+			first: null,
+			last: null
+		};
+	};
+
+	// Sets the cells that are selected in the table. Based on this it figures out what cell is
+	// the first, and the last. Also sets rows property accordingly.
+	// Note: ATM the type does not make an actual selection, it just holds the data.
+	//
+	// @param {CKEDITOR.dom.element[]} [cells] An array of cells considered to be selected.
+	TableSelection.prototype.setSelectedCells = function( cells ) {
+		this._reset();
+		// Make sure we're not modifying input array.
+		cells = cells.slice( 0 );
+		this._arraySortByDOMOrder( cells );
+
+		this.cells.all = cells;
+
+		this.cells.first = cells[ 0 ];
+		this.cells.last = cells[ cells.length - 1 ];
+
+		this.rows.first = cells[ 0 ].getAscendant( 'tr' );
+		this.rows.last = this.cells.last.getAscendant( 'tr' );
+	};
+
+	// Returns a table map, returned by {@link CKEDITOR.tools#buildTableMap}.
+	// @returns {HTMLElement[]}
+	TableSelection.prototype.getTableMap = function() {
+		function getRealCellPosition( cell ) {
+			var table = cell.getAscendant( 'table' ),
+				rowIndex = getRowIndex( cell ),
+				map = CKEDITOR.tools.buildTableMap( table ),
+				i;
+
+			for ( i = 0; i < map[ rowIndex ].length; i++ ) {
+				if ( new CKEDITOR.dom.element( map[ rowIndex ][ i ] ).equals( cell ) ) {
+					return i;
+				}
+			}
+		}
+
+		var startIndex = getCellColIndex( this.cells.first ),
+			endIndex = getRealCellPosition( this.cells.last );
+
+		return CKEDITOR.tools.buildTableMap( this._getTable(), getRowIndex( this.rows.first ), startIndex,
+			getRowIndex( this.rows.last ), endIndex );
+	};
+
+	TableSelection.prototype._getTable = function() {
+		return this.rows.first.getAscendant( 'table' );
+	};
+
+	// @param {Number} count Number of rows to be inserted.
+	// @param {Boolean} [insertBefore=false] If set to `true` new rows will be prepended.
+	// @param {Boolean} [clearSelection=false] If set to `true`, it will set selected cells to the one inserted.
+	TableSelection.prototype.insertRow = function( count, insertBefore, clearSelection ) {
+		if ( typeof count === 'undefined' ) {
+			count = 1;
+		} else if ( count <= 0 ) {
+			return;
+		}
+
+		var cellIndexFirst = this.cells.first.$.cellIndex,
+			cellIndexLast = this.cells.last.$.cellIndex,
+			selectedCells = clearSelection ? [] : this.cells.all,
+			row,
+			newCells;
+
+		for ( var i = 0; i < count; i++ ) {
+			// In case of clearSelection we need explicitly use cached cells, as selectedCells is empty.
+			row = insertRow( clearSelection ? this.cells.all : selectedCells, insertBefore );
+
+			// Append cells from added row.
+			newCells = CKEDITOR.tools.array.filter( row.find( 'td, th' ).toArray(), function( cell ) {
+				return clearSelection ?
+					true : cell.$.cellIndex >= cellIndexFirst && cell.$.cellIndex <= cellIndexLast;
+			} );
+
+			// setSelectedCells will take care of refreshing the whole state at once.
+			if ( insertBefore ) {
+				selectedCells = newCells.concat( selectedCells );
+			} else {
+				selectedCells = selectedCells.concat( newCells );
+			}
+		}
+
+		this.setSelectedCells( selectedCells );
+	};
+
+	// @param {Number} count Number of columns to be inserted.
+	TableSelection.prototype.insertColumn = function( count ) {
+		if ( typeof count === 'undefined' ) {
+			count = 1;
+		} else if ( count <= 0 ) {
+			return;
+		}
+
+		var cells = this.cells,
+			selectedCells = cells.all,
+			minRowIndex = getRowIndex( cells.first ),
+			maxRowIndex = getRowIndex( cells.last );
+
+		function limitCells( cell ) {
+			var parentRowIndex = getRowIndex( cell );
+
+			return parentRowIndex >= minRowIndex && parentRowIndex <= maxRowIndex;
+		}
+
+		for ( var i = 0; i < count; i++ ) {
+			// Prepend added cells, then pass it to setSelectionCells so that it will take care of refreshing
+			// the whole state. Note that returned cells needs to be filtered, so that only cells that
+			// should get selected are added to the selectedCells array.
+			selectedCells = selectedCells.concat( CKEDITOR.tools.array.filter( insertColumn( selectedCells ), limitCells ) );
+		}
+
+		this.setSelectedCells( selectedCells );
+	};
+
+	// Clears the content of selected cells.
+	//
+	// @param {CKEDITOR.dom.element[]} [cells] If given, this cells will be cleared.
+	TableSelection.prototype.emptyCells =  function( cells ) {
+		cells = cells || this.cells.all;
+
+		for ( var i = 0; i < cells.length; i++ ) {
+			cells[ i ].setHtml( '' );
+		}
+	};
+
+	// Sorts given arr according to DOM position.
+	//
+	// @param {CKEDITOR.dom.node[]} arr
+	TableSelection.prototype._arraySortByDOMOrder = function( arr ) {
+		arr.sort( function( el1, el2 ) {
+			return el1.getPosition( el2 ) & CKEDITOR.POSITION_PRECEDING ? -1 : 1;
+		} );
+	};
+
+	var fakeSelectionPasteHandler = {
+		onPaste: pasteListener,
 		// Check if the selection is collapsed on the beginning of the row (1) or at the end (2).
-		function isBoundarySelection( selection ) {
+		isBoundarySelection: function( selection ) {
 			var ranges = selection.getRanges(),
 				range = ranges[ 0 ],
 				row = range.endContainer.getAscendant( 'tr', true );
@@ -487,197 +640,201 @@
 			}
 
 			return 0;
+		},
+
+		// Looks for a table in a given pasted content string. Returns it as a
+		// CKEDITOR.dom.element instance or null if mixed content, or more than one table found.
+		findTableInPastedContent: function( editor, dataValue ) {
+			var dataProcessor = editor.dataProcessor,
+				tmpContainer = new CKEDITOR.dom.element( 'body' );
+
+			if ( !dataProcessor ) {
+				dataProcessor = new CKEDITOR.htmlDataProcessor( editor );
+			}
+
+			// Pasted value must be filtered using dataProcessor to strip all unsafe code
+			// before inserting it into temporary container.
+			tmpContainer.setHtml( dataProcessor.toHtml( dataValue ), {
+				fixForBody: false
+			} );
+
+			return tmpContainer.getChildCount() > 1 ? null : tmpContainer.findOne( 'table' );
+		},
+
+		// Performs an actual paste into selectedTableMap based on content in pastedTableMap.
+		pasteTable: function( tableSel, selectedTableMap, pastedTableMap ) {
+			var cellToReplace,
+				// Index of first selected cell, it needs to be reused later, to calculate the
+				// proper position of newly pasted cells.
+				startIndex = getCellColIndex( tableSel.cells.first ),
+				selectedTable = tableSel._getTable(),
+				markers = {},
+				currentRow,
+				prevCell,
+				cellToPaste,
+				i,
+				j;
+
+			// And now paste!
+			for ( i = 0; i < pastedTableMap.length; i++ ) {
+				currentRow = new CKEDITOR.dom.element( selectedTable.$.rows[ tableSel.rows.first.$.rowIndex + i ] );
+
+				for ( j = 0; j < pastedTableMap[ i ].length; j++ ) {
+					cellToPaste = new CKEDITOR.dom.element( pastedTableMap[ i ][ j ] );
+
+					if ( selectedTableMap[ i ] && selectedTableMap[ i ][ j ] ) {
+						cellToReplace = new CKEDITOR.dom.element( selectedTableMap[ i ][ j ] );
+					} else {
+						cellToReplace = null;
+					}
+
+					// Only try to paste cells that aren't already pasted (it can occur if the pasted cell
+					// has [colspan] or [rowspan]).
+					if ( cellToPaste && !cellToPaste.getCustomData( 'processed' ) ) {
+						// If the cell to being replaced has [colspan], it could have been already
+						// replaced. In that case, it won't have parent.
+						if ( cellToReplace && cellToReplace.getParent() ) {
+							cellToPaste.replace( cellToReplace );
+						} else if ( j === 0 || pastedTableMap[ i ][ j - 1 ] ) {
+							if ( j !== 0 ) {
+								prevCell = new CKEDITOR.dom.element( pastedTableMap[ i ][ j - 1 ] );
+							} else {
+								prevCell = null;
+							}
+
+							// If the cell that should be replaced is not in the table, we must cover at least 3 cases:
+							// 1. Pasting cell in the same row as the previous pasted cell.
+							// 2. Pasting cell into the next row at the proper position.
+							// 3. If the selection started from the left edge of the table,
+							// prepending the proper row with the cell.
+							if ( prevCell && currentRow.equals( prevCell.getParent() ) ) {
+								cellToPaste.insertAfter( prevCell );
+							} else if ( startIndex > 0 ) {
+								// It might happen that there's no cell with startIndex, as it might be used by a rowspan.
+								if ( currentRow.$.cells[ startIndex ] ) {
+									cellToPaste.insertAfter( new CKEDITOR.dom.element( currentRow.$.cells[ startIndex ] ) );
+								} else {
+									// Since rowspans are erased from current selection, we want need to append a cell.
+									currentRow.append( cellToPaste );
+								}
+							} else {
+								currentRow.append( cellToPaste, true );
+							}
+						}
+
+						CKEDITOR.dom.element.setMarker( markers, cellToPaste, 'processed', true );
+					} else if ( cellToPaste.getCustomData( 'processed' ) && cellToReplace ) {
+						// If the cell was already pasted, but the cell to replace still exists (e.g. pasted
+						// cell has [colspan]), remove it.
+						cellToReplace.remove();
+					}
+				}
+			}
+
+			CKEDITOR.dom.element.clearAllMarkers( markers );
 		}
+	};
+
+	function pasteListener( evt ) {
+		var editor = evt.editor,
+			selection = editor.getSelection(),
+			selectedCells = getSelectedCells( selection ),
+			pastedTable = this.findTableInPastedContent( editor, evt.data.dataValue ),
+			boundarySelection = selection.isInTable( true ) && this.isBoundarySelection( selection ),
+			tableSel,
+			selectedTable,
+			selectedTableMap,
+			pastedTableMap;
 
 		function getLongestRowLength( map ) {
-			var longest = 0,
-				i;
-
-			for ( i = 0; i < map.length; i++ ) {
-				if ( map[ i ].length > longest ) {
-					longest = map[ i ].length;
-				}
-			}
-
-			return longest;
+			return Math.max.apply( null, CKEDITOR.tools.array.map( map, function( rowMap ) {
+				return rowMap.length;
+			}, 0 ) );
 		}
 
-		function getRealCellPosition( cell ) {
-			var table = cell.getAscendant( 'table' ),
-				rowIndex = cell.getParent().$.rowIndex,
-				map = CKEDITOR.tools.buildTableMap( table ),
-				i;
+		function selectCellContents( cell ) {
+			var range = editor.createRange();
 
-			for ( i = 0; i < map[ rowIndex ].length; i++ ) {
-				if ( new CKEDITOR.dom.element( map[ rowIndex ][ i ] ).equals( cell ) ) {
-					return i;
-				}
-			}
+			range.selectNodeContents( cell );
+			range.select();
 		}
 
-		if ( !dataProcessor ) {
-			dataProcessor = new CKEDITOR.htmlDataProcessor( editor );
-		}
-
-		// Pasted value must be filtered using dataProcessor to strip all unsafe code
-		// before inserting it into temporary container.
-		tmpContainer.setHtml( dataProcessor.toHtml( evt.data.dataValue ), {
-			fixForBody: false
-		} );
-		pastedTable = tmpContainer.findOne( 'table' );
-
-		if ( !selection.getRanges().length || !selection.isInTable() && !( boundarySelection = isBoundarySelection( selection ) ) ) {
+		// Do not customize paste process in following cases:
+		// No cells are selected.
+		if ( !selectedCells.length ||
+			// It's single range that does not fully contain table element and is not boundary, e.g. collapsed selection within
+			// cell, part of cell etc.
+			( selectedCells.length === 1 && !rangeContainsTableElement( selection.getRanges()[ 0 ] )  && !boundarySelection ) ||
+			// It's a boundary position but with no table pasted.
+			( boundarySelection && !pastedTable ) ) {
 			return;
 		}
-
-		selectedCells = getSelectedCells( selection );
-
-		if ( !selectedCells.length ) {
-			return;
-		}
-
-		evt.stop();
 
 		selectedTable = selectedCells[ 0 ].getAscendant( 'table' );
-		selectedCells = getSelectedCells( selection, selectedTable );
-		firstCell = selectedCells[ 0 ];
-		firstRow = firstCell.getParent();
-		lastCell = selectedCells[ selectedCells.length - 1 ];
-		lastRow = lastCell.getParent();
+		tableSel = new TableSelection( getSelectedCells( selection, selectedTable ) );
 
-		// Empty all selected cells.
-		if ( !boundarySelection ) {
-			for ( i = 0; i < selectedCells.length; i++ ) {
-				selectedCells[ i ].setHtml( '' );
-			}
+		function getLastArrayItem( arr ) {
+			return arr[ arr.length - 1 ];
 		}
 
-		// Handle mixed content (if the table is not the only child in the tmpContainer, we
-		// are probably dealing with mixed content). We handle also non-table content here.
-		if ( tmpContainer.getChildCount() > 1 || !pastedTable ) {
-			selectedCells[ 0 ].setHtml( tmpContainer.getHtml() );
+		// Schedule selecting appropriate table cells after pasting. It covers both table and not-table
+		// content (#520).
+		editor.once( 'afterPaste', function() {
+			var toSelect = pastedTableMap ?
+				getCellsBetween( new CKEDITOR.dom.element( pastedTableMap[ 0 ][ 0 ] ),
+					new CKEDITOR.dom.element( getLastArrayItem( getLastArrayItem( pastedTableMap ) ) ) ) :
+				tableSel.cells.all;
 
-			editor.fire( 'saveSnapshot' );
+			fakeSelectCells( editor, toSelect );
+		} );
+
+		// In case of mixed content or non table content just select first cell, and erase content of other selected cells.
+		// Selection is left in first cell, so that default CKEditor logic puts pasted content in the selection (#520).
+		if ( !pastedTable ) {
+			selectCellContents( tableSel.cells.first );
+
+			// Due to limitations of our undo manager, in case of mixed content
+			// cells must be emptied after pasting (#520).
+			editor.once( 'afterPaste', function() {
+				editor.fire( 'lockSnapshot' );
+				tableSel.emptyCells( tableSel.cells.all.slice( 1 ) );
+				// Reselecting cells allows to create correct undo snapshot (#763).
+				fakeSelectCells( editor, tableSel.cells.all );
+				editor.fire( 'unlockSnapshot' );
+			} );
 
 			return;
 		}
+
+		// Preventing other paste handlers should be done after all early returns (#520).
+		evt.stop();
 
 		// In case of boundary selection, insert new row before/after selected one, select it
 		// and resume the rest of the algorithm.
 		if ( boundarySelection ) {
-			endIndex = firstRow.getChildCount();
-			firstRow = lastRow = new CKEDITOR.dom.element( 'tr' );
-			firstRow[ 'insert' + ( boundarySelection === 1 ? 'Before' : 'After' ) ]( firstCell.getParent() );
-
-			for ( i = 0; i < endIndex; i++ ) {
-				firstCell = new CKEDITOR.dom.element( 'td' );
-				firstCell.appendTo( firstRow );
-			}
-
-			firstCell = firstRow.getFirst();
-			lastCell = firstRow.getLast();
-
-			selection.selectElement( firstRow );
-			selectedCells = getSelectedCells( selection );
+			tableSel.insertRow( 1, boundarySelection === 1, true );
+			selection.selectElement( tableSel.rows.first );
+		} else {
+			// Otherwise simply clear all the selected cells.
+			tableSel.emptyCells();
+			// Reselecting cells allows to create correct undo snapshot (#763).
+			fakeSelectCells( editor, tableSel.cells.all );
 		}
 
 		// Build table map only for selected fragment.
-		selectedTableMap = CKEDITOR.tools.buildTableMap( selectedTable, firstRow.$.rowIndex,
-			getCellColIndex( firstCell, true ), lastRow.$.rowIndex, getRealCellPosition( lastCell ) );
+		selectedTableMap = tableSel.getTableMap();
 		pastedTableMap = CKEDITOR.tools.buildTableMap( pastedTable );
 
+		tableSel.insertRow( pastedTableMap.length - selectedTableMap.length );
 
 		// Now we compare the dimensions of the pasted table and the selected one.
 		// If the pasted one is bigger, we add missing rows and columns.
-		pastedTableColCount = getLongestRowLength( pastedTableMap );
-		selectedTableColCount = getLongestRowLength( selectedTableMap );
-
-		if ( pastedTableMap.length > selectedTableMap.length ) {
-			newRowsCount = pastedTableMap.length - selectedTableMap.length;
-
-			for ( i = 0; i < newRowsCount; i++ ) {
-				insertRow( selectedCells );
-			}
-		}
-
-		if ( pastedTableColCount > selectedTableColCount ) {
-			newColsCount = pastedTableColCount - selectedTableColCount;
-
-			for ( i = 0; i < newColsCount; i++ ) {
-				insertColumn( selectedCells );
-			}
-		}
-
-		// Get all selected cells (original ones + newly inserted ones).
-		firstCell = selectedCells[ 0 ];
-		firstRow = firstCell.getParent();
-		lastCell = selectedCells[ selectedCells.length - 1 ];
-		lastRow = new CKEDITOR.dom.element( selectedTable.$.rows[ lastCell.getParent().$.rowIndex + newRowsCount ] );
-		lastCell = lastRow.getChild( lastCell.$.cellIndex + newColsCount );
-
-		// These indexes would be reused later, to calculate the proper position of newly pasted cells.
-		startIndex = getCellColIndex( selectedCells[ 0 ], true );
-		endIndex = getRealCellPosition( lastCell );
+		tableSel.insertColumn( getLongestRowLength( pastedTableMap ) - getLongestRowLength( selectedTableMap ) );
 
 		// Rebuild map for selected table.
-		selectedTableMap = CKEDITOR.tools.buildTableMap( selectedTable, firstRow.$.rowIndex, startIndex,
-			lastRow.$.rowIndex, endIndex );
+		selectedTableMap = tableSel.getTableMap();
 
-		// And now paste!
-		for ( i = 0; i < pastedTableMap.length; i++ ) {
-			currentRow = new CKEDITOR.dom.element( selectedTable.$.rows[ firstRow.$.rowIndex + i ] );
-
-			for ( j = 0; j < pastedTableMap[ i ].length; j++ ) {
-				cellToPaste = new CKEDITOR.dom.element( pastedTableMap[ i ][ j ] );
-
-				if ( selectedTableMap[ i ] && selectedTableMap[ i ][ j ] ) {
-					cellToReplace = new CKEDITOR.dom.element( selectedTableMap[ i ][ j ] );
-				} else {
-					cellToReplace = null;
-				}
-
-				// Only try to paste cells that aren't already pasted (it can occur if the pasted cell
-				// has [colspan] or [rowspan]).
-				if ( cellToPaste && !cellToPaste.getCustomData( 'processed' ) ) {
-					// If the cell to being replaced has [colspan], it could have been already
-					// replaced. In that case, it won't have parent.
-					if ( cellToReplace && cellToReplace.getParent() ) {
-						cellToPaste.replace( cellToReplace );
-					} else if ( j === 0 || pastedTableMap[ i ][ j - 1 ] ) {
-						if ( j !== 0 ) {
-							prevCell = new CKEDITOR.dom.element( pastedTableMap[ i ][ j - 1 ] );
-						} else {
-							prevCell = null;
-						}
-
-						// If the cell that should be replaced is not in the table, we must cover at least 3 cases:
-						// 1. Pasting cell in the same row as the previous pasted cell.
-						// 2. Pasting cell into the next row at the proper position.
-						// 3. If the selection started from the left edge of the table,
-						// prepending the proper row with the cell.
-						if ( prevCell && currentRow.equals( prevCell.getParent() ) ) {
-							cellToPaste.insertAfter( prevCell );
-						} else if ( startIndex > 0 ) {
-							cellToPaste.insertAfter( new CKEDITOR.dom.element( currentRow.$.cells[ startIndex ] ) );
-						} else {
-							currentRow.append( cellToPaste, true );
-						}
-					}
-
-					CKEDITOR.dom.element.setMarker( markers, cellToPaste, 'processed', true );
-				} else if ( cellToPaste.getCustomData( 'processed' ) && cellToReplace ) {
-					// If the cell was already pasted, but the cell to replace still exists (e.g. pasted
-					// cell has [colspan]), remove it.
-					cellToReplace.remove();
-				}
-			}
-		}
-
-		CKEDITOR.dom.element.clearAllMarkers( markers );
-
-		// Select newly pasted cells.
-		fakeSelectCells( editor,
-				getCellsBetween( new CKEDITOR.dom.element( pastedTableMap[ 0 ][ 0 ] ), cellToPaste ) );
+		this.pasteTable( tableSel, selectedTableMap, pastedTableMap );
 
 		editor.fire( 'saveSnapshot' );
 
@@ -703,7 +860,7 @@
 
 	/**
 	 * Namespace providing a set of helper functions for working with tables, exposed by
-	 * [Table Selection](http://ckeditor.com/addon/tableselection) plugin.
+	 * [Table Selection](https://ckeditor.com/cke4/addon/tableselection) plugin.
 	 *
 	 * @since 4.7.0
 	 * @singleton
@@ -768,7 +925,7 @@
 							selectBeginning = false,
 							matchingElement = function( elem ) {
 								// We're interested in matching only td/th but not contained by the startNode since it will be removed.
-								// Technically none of startNode children should be visited but it will due to http://dev.ckeditor.com/ticket/12191.
+								// Technically none of startNode children should be visited but it will due to https://dev.ckeditor.com/ticket/12191.
 								return !startNode.contains( elem ) && elem.is && elem.is( 'td', 'th' );
 							};
 
@@ -805,7 +962,7 @@
 
 				return function( evt ) {
 					// Use getKey directly in order to ignore modifiers.
-					// Justification: http://dev.ckeditor.com/ticket/11861#comment:13
+					// Justification: https://dev.ckeditor.com/ticket/11861#comment:13
 					var keystroke = evt.data.getKey(),
 						selection,
 						toStart = keystroke === 37 || keystroke == 38,
@@ -878,12 +1035,18 @@
 					clearCellInRange( ranges[ i ] );
 				}
 
-				ranges[ 0 ].moveToElementEditablePosition( firstCell );
-				selection.selectRanges( [ ranges[ 0 ] ] );
+				// In case of selection of table element, there won't be any cell (#867).
+				if ( firstCell ) {
+					ranges[ 0 ].moveToElementEditablePosition( firstCell );
+					selection.selectRanges( [ ranges[ 0 ] ] );
+				}
 			}
 
 			function clearCellInRange( range ) {
-				if ( range.getEnclosedNode() ) {
+				var node = range.getEnclosedNode();
+
+				// Set text only in case of table cells, otherwise remove whole element (#867).
+				if ( node && node.is( { td: 1, th: 1 } ) ) {
 					range.getEnclosedNode().setText( '' );
 				} else {
 					range.deleteContents();
@@ -903,7 +1066,7 @@
 			editable.attachListener( editable, 'keypress', tableKeyPressListener, null, null, -1 );
 		},
 
-		/*
+		/**
 		 * Determines whether table selection is supported in the current environment.
 		 *
 		 * @property {Boolean}
@@ -923,7 +1086,7 @@
 			insertRow = tabletools.insertRow;
 			insertColumn = tabletools.insertColumn;
 
-			CKEDITOR.document.appendStyleSheet( this.path + '/styles/tableselection.css' );
+			CKEDITOR.document.appendStyleSheet( this.path + 'styles/tableselection.css' );
 		},
 
 		init: function( editor ) {
@@ -934,7 +1097,7 @@
 
 			// Add styles for fake visual selection.
 			if ( editor.addContentsCss ) {
-				editor.addContentsCss( this.path + '/styles/tableselection.css' );
+				editor.addContentsCss( this.path + 'styles/tableselection.css' );
 			}
 
 			editor.on( 'contentDom', function() {
@@ -959,7 +1122,7 @@
 				}
 			} );
 
-			editor.on( 'paste', fakeSelectionPasteHandler );
+			editor.on( 'paste', fakeSelectionPasteHandler.onPaste, fakeSelectionPasteHandler );
 
 			customizeTableCommand( editor, [
 				'rowInsertBefore',

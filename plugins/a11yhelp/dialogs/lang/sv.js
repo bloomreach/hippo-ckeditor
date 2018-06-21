@@ -1,6 +1,6 @@
 /**
- * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
 CKEDITOR.plugins.setLang( 'a11yhelp', 'sv', {
@@ -81,9 +81,9 @@ CKEDITOR.plugins.setLang( 'a11yhelp', 'sv', {
 			legend: 'Tryck ${a11yHelp}'
 		},
 			{
-			name: ' Paste as plain text', // MISSING
-			legend: 'Press ${pastetext}', // MISSING
-			legendEdge: 'Press ${pastetext}, followed by ${paste}' // MISSING
+			name: 'Klistra in som vanlig text',
+			legend: 'Tryck ${pastetext}',
+			legendEdge: 'Tryck ${pastetext}, följt av ${paste}'
 		}
 		]
 	}

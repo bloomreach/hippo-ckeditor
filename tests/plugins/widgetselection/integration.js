@@ -1,4 +1,4 @@
-/* bender-tags: 4.6.1, tc, 11064, widgetselection */
+/* bender-tags: 4.6.1, trac11064, widgetselection */
 /* bender-ckeditor-plugins: wysiwygarea, widgetselection */
 /* bender-include: _helpers/tools.js */
 /* global htmlWithSelectionHelper */
@@ -155,7 +155,7 @@
 			var editor = this.editor;
 
 			if ( CKEDITOR.env.chrome ) {
-				// http://dev.ckeditor.com/ticket/17029
+				// https://dev.ckeditor.com/ticket/17029
 				assert.ignore();
 			}
 
