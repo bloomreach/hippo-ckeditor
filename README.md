@@ -35,7 +35,7 @@ Each branch `hippo/<version>` contains all commits in the CKEditor branch `relea
 modifications. 
 
 There can be separate maintenance branches that contain Hippo-specific modifications limited to a specific Hippo 
-release. For example, the branch `hippo/release/12.0` would contain the Hippo CKEditor version for Hippo 12.0. The 
+release. For example, the branch `release/12.0` would contain the Hippo CKEditor version for Hippo 12.0. The 
 `hippo/<version>` branch acts as the `master` branch for the next Hippo release.   
 
 A release is available in a tag are named `hippo/<version>`, e.g. `hippo/4.7.1-h12.1.0`. 
@@ -76,7 +76,7 @@ cms release pom.
 ### Situation from 12.5.0 (4.9.x)
 
 There is no need for specific hippo/4.9.x etc. branches since we create a specific release branch
-for every Hippo release anyway. So you can merge changes or new releases directly in the hippo/release/12.x
+for every Hippo release anyway. So you can merge changes or new releases directly in the release/12.x
 branches without maintaining a hippo/4.9.x branch specifically.
 
 ### Upstream changes new style
@@ -89,7 +89,7 @@ When a new patch version is released upstream, its tag can be merged into the ma
 find the current ckeditor version in package.json. For example, to merge upstream tag 4.9.3:
 
     git fetch upstream
-    git checkout hippo/release/12.5
+    git checkout release/12.5
     git merge 4.9.3
 
 Update the version number of the project if necessary (e.g when moving from 4.9.2 to 4.9.3). Also update the 
