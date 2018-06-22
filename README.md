@@ -16,6 +16,16 @@ The following external plugins are included:
 
 ## Versions
 
+### Script and version
+
+The script `/dev/builder/build.sh` needs a 'build version' parameter, which is burned into the generated code.
+Hippo CMS uses the same version number as in the tag name (e.g. '4.7.1-h12.1.0').
+
+Note that the version scheme of Hippo CKEditor changed over time. Until Hippo 11.x, the CKEditor version was extended 
+with a single nano patch version prefixed with `-h` (e.g. `4.3.0-h1`). Hippo 12.x introduced the semantic Hippo-specific
+version and the maintenance branches.
+
+### Situation for 4.7.x / 12.4.0 and before
 A Hippo-specific CKEditor build adds a semantic version to the CKEditor version it extends, prefixed with `-h`.
 The major and minor number of this additional version match the Hippo release in which the CKEditor build is used. 
 For example, version `4.7.1-h12.1.0` extends CKEditor `4.7.1` and is used in Hippo release `12.1`. The patch number 
@@ -30,14 +40,7 @@ release. For example, the branch `hippo/release/12.0` would contain the Hippo CK
 
 A release is available in a tag are named `hippo/<version>`, e.g. `hippo/4.7.1-h12.1.0`. 
 
-The script `/dev/builder/build.sh` needs a 'build version' parameter, which is burned into the generated code.
-Hippo CMS uses the same version number as in the tag name (e.g. '4.7.1-h12.1.0').
-
-Note that the version scheme of Hippo CKEditor changed over time. Until Hippo 11.x, the CKEditor version was extended 
-with a single nano patch version prefixed with `-h` (e.g. `4.3.0-h1`). Hippo 12.x introduced the semantic Hippo-specific
-version and the maintenance branches.
-
-### Upstream changes
+### Upstream changes old style
 
 To get upstream changes, first add a remote for the upstream CKEditor repository:
 
@@ -67,6 +70,31 @@ branch must be pushed to origin, so other people can fetch it too. For example, 
     git merge hippo/4.3.x
     git push origin hippo/4.4.x
 
+Update the version number of the project if necessary (e.g when moving from 4.9.2 to 4.9.3). Also update the 
+cms release pom.
+
+### Situation from 12.5.0 (4.9.x)
+
+There is no need for specific hippo/4.9.x etc. branches since we create a specific release branch
+for every Hippo release anyway. So you can merge changes or new releases directly in the hippo/release/12.x
+branches without maintaining a hippo/4.9.x branch specifically.
+
+### Upstream changes new style
+
+To get upstream changes, first add a remote for the upstream CKEditor repository:
+
+    git remote add -f upstream https://github.com/ckeditor/ckeditor-dev.git
+
+When a new patch version is released upstream, its tag can be merged into the matching hippo-specific branch. You can 
+find the current ckeditor version in package.json. For example, to merge upstream tag 4.9.3:
+
+    git fetch upstream
+    git checkout hippo/release/12.5
+    git merge 4.9.3
+
+Update the version number of the project if necessary (e.g when moving from 4.9.2 to 4.9.3). Also update the 
+cms release pom.
+
 ### How to check CKEditor version in the browser
 
 Open the devtools / console and type on the console commmand line CKEDITOR.version.
@@ -76,7 +104,7 @@ Open the devtools / console and type on the console commmand line CKEDITOR.versi
 
 Prerequisites:
 
-  - [NodeJS (6.x.x)](https://nodejs.org/)
+  - [NodeJS (8.x.x)](https://nodejs.org/)
   - [npm](https://www.npmjs.com/)
   - [Maven](http://maven.apache.org/)
 
