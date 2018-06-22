@@ -10,7 +10,6 @@
 		"ckeditor-youtube-plugin": "2.1.5"
 	},
 	"devDependencies": {
-		"@ckeditor/ckeditor-cloudservices-core": "^0.1.0",
 		"benderjs": "^0.4.2",
 		"benderjs-coverage": "^0.2.1",
 		"benderjs-jquery": "^0.3.0",
