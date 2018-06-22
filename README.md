@@ -67,6 +67,11 @@ branch must be pushed to origin, so other people can fetch it too. For example, 
     git merge hippo/4.3.x
     git push origin hippo/4.4.x
 
+### How to check CKEditor version in the browser
+
+Open the devtools / console and type on the console commmand line CKEDITOR.version.
+
+
 ### Deployment to Nexus
 
 Prerequisites:
