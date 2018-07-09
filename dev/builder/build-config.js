@@ -69,7 +69,6 @@ var CKBUILDER_CONFIG = {
 		font: 1,
 		format: 1,
 		forms: 1,
-		hippopicker: 1,
 		horizontalrule: 1,
 		htmlwriter: 1,
 		iframe: 1,
