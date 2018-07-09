@@ -126,10 +126,6 @@
 		</plugins>
 	</build>
 
-	<modules>
-		<module>config</module>
-	</modules>
-
 	<profiles>
 		<profile>
 			<id>pedantic</id>
