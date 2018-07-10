@@ -43,7 +43,7 @@ with the same version number. For example:
     git merge upstream/release/4.9.x
 
 When a new patch version is released upstream, its tag can be merged into the matching hippo-specific branch.
-For example, to merge upstream tag 4.4.5:
+For example, to merge upstream tag 4.9.3:
 
     git fetch upstream
     git checkout hippo/4.9.x
@@ -51,7 +51,7 @@ For example, to merge upstream tag 4.4.5:
 
 When a new minor version is released upstream, a new hippo-specific branch should be created based on the upstream
 branch. All hippo-specific customizations in the previous branch can then be merged into the new one. The new
-branch must be pushed to origin, so other people can fetch it too. For example, to upgrade from 4.3.x to 4.4.x:
+branch must be pushed to origin, so other people can fetch it too. For example, to upgrade from 4.9.x to 4.10.x:
 
     git fetch upstream
     git checkout release/4.10.x
@@ -64,7 +64,9 @@ ckeditor version in the hippo-cms pom.
 
 ### How to check CKEditor version in the browser
 
-Open the devtools / console and type on the console commmand line CKEDITOR.version.
+Open the devtools / console and type on the console command line:
+
+    CKEDITOR.version
 
 ### Deployment to Nexus
 
