@@ -39,6 +39,12 @@
 		</repository>
 	</repositories>
 
+	<properties>
+		<maven.plugin.frontend.version>1.6</maven.plugin.frontend.version>
+		<nodejs.version>v8.13.0</nodejs.version>
+		<npm.version>6.4.1</npm.version>
+	</properties>
+
 	<build>
 		<defaultGoal>package</defaultGoal>
 		<plugins>
@@ -49,13 +55,21 @@
 				<configuration>
 					<filesets>
 						<fileset>
+							<directory>node</directory>
+						</fileset>
+						<fileset>
 							<directory>node_modules</directory>
-							<followSymlinks>false</followSymlinks>
 						</fileset>
 						<fileset>
 							<directory>plugins/codemirror</directory>
+						</fileset>
+						<fileset>
 							<directory>plugins/textselection</directory>
+						</fileset>
+						<fileset>
 							<directory>plugins/youtube</directory>
+						</fileset>
+						<fileset>
 							<directory>plugins/wordcount</directory>
 						</fileset>
 						<fileset>
@@ -65,24 +79,39 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>${maven.plugin.frontend.version}</version>
+				<executions>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>${nodejs.version}</nodeVersion>
+							<npmVersion>${npm.version}</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install --prod</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<inherited>false</inherited>
 				<executions>
 					<execution>
-						<id>npm</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>npm</executable>
-							<commandlineArgs>install --prod</commandlineArgs>
-						</configuration>
-					</execution>
-					<execution>
 						<id>ckbuilder</id>
-						<phase>generate-sources</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>

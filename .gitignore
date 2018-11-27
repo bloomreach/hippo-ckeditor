@@ -33,8 +33,9 @@ bender-*.log
 
 # Hippo-specific additions
 *.iml
-target/
-plugins/codemirror/
-plugins/textselection/
-plugins/wordcount/
-plugins/youtube/
+/target/
+/node/
+/plugins/codemirror/
+/plugins/textselection/
+/plugins/wordcount/
+/plugins/youtube/
