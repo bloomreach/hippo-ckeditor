@@ -32,7 +32,7 @@ CKEDITOR.plugins.setLang( 'link', 'fr-ca', {
 	langDirRTL: 'De droite à gauche (RTL)',
 	menu: 'Modifier le lien',
 	name: 'Nom',
-	noAnchors: '(Pas d\'ancre disponible dans le document)',
+	noAnchors: '(Pas d\'ancre disponible dans le texte)',
 	noEmail: 'Veuillez saisir le courriel',
 	noUrl: 'Veuillez saisir l\'URL',
 	noTel: 'Please type the phone number', // MISSING
@@ -58,12 +58,12 @@ CKEDITOR.plugins.setLang( 'link', 'fr-ca', {
 	targetFrameName: 'Nom du cadre de destination',
 	targetPopup: '<fenêtre popup>',
 	targetPopupName: 'Nom de la fenêtre popup',
-	title: 'Lien',
-	toAnchor: 'Ancre dans cette page',
+	title: 'Lien externe',
+	toAnchor: 'Lien vers l\'ancre dans le texte',
 	toEmail: 'Courriel',
 	toUrl: 'URL',
 	toPhone: 'Phone', // MISSING
-	toolbar: 'Lien',
+	toolbar: 'Lien externe',
 	type: 'Type de lien',
 	unlink: 'Supprimer le lien',
 	upload: 'Téléverser'

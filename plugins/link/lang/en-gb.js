@@ -32,7 +32,7 @@ CKEDITOR.plugins.setLang( 'link', 'en-gb', {
 	langDirRTL: 'Right to Left (RTL)',
 	menu: 'Edit Link',
 	name: 'Name',
-	noAnchors: '(No anchors available in the document)',
+	noAnchors: '(No anchors available in the text)',
 	noEmail: 'Please type the e-mail address',
 	noUrl: 'Please type the link URL',
 	noTel: 'Please type the phone number', // MISSING
@@ -58,12 +58,12 @@ CKEDITOR.plugins.setLang( 'link', 'en-gb', {
 	targetFrameName: 'Target Frame Name',
 	targetPopup: '<popup window>',
 	targetPopupName: 'Popup Window Name',
-	title: 'Link',
-	toAnchor: 'Link to anchor in the text',
+	title: 'External link',
+	toAnchor: 'Link to anchor in text',
 	toEmail: 'E-mail',
 	toUrl: 'URL',
 	toPhone: 'Phone', // MISSING
-	toolbar: 'Link',
+	toolbar: 'External link',
 	type: 'Link Type',
 	unlink: 'Unlink',
 	upload: 'Upload'

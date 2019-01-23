@@ -30,3 +30,13 @@ bender-*.log
 !.github/*
 !.npm/*
 .DS_Store
+
+
+# Hippo-specific additions
+*.iml
+/target/
+/node/
+/plugins/codemirror/
+/plugins/textselection/
+/plugins/wordcount/
+/plugins/youtube/

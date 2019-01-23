@@ -1317,6 +1317,32 @@ Fixed Issues:
 * [#11260](https://dev.ckeditor.com/ticket/11260): Fixed: Initially disabled buttons are not read by JAWS as disabled.
 * [#11200](https://dev.ckeditor.com/ticket/11200):  Added [Clipboard](https://ckeditor.com/cke4/addon/clipboard) plugin as a dependency for [Widget](https://ckeditor.com/cke4/addon/widget) to fix drag and drop.
 
+## CKEditor 4.3.0-h6
+
+* [CMS7-7677](https://issues.onehippo.com/browse/CMS7-7677) Improve Dutch and English labels for links
+
+## CKEditor 4.3.0-h5
+
+* [CMS7-7688](https://issues.onehippo.com/browse/CMS7-7688) Publish CKEditor in Nexus and use it as CMS dependency
+
+## CKEditor 4.3.0-h4
+
+* [CMS7-7615](https://issues.onehippo.com/browse/CMS7-7615) Added configuration option 'linkShowSurroundingAnchors', removed option 'linkTypes'
+
+## CKEditor 4.3.0-h3
+
+* [CMS7-7615](https://issues.onehippo.com/browse/CMS7-7615) Changed icon of the 'link' button
+
+## CKEditor 4.3.0-h2
+
+* [CMS7-7615](https://issues.onehippo.com/browse/CMS7-7615) Added configuration option 'linkTypes'
+
+## CKEditor 4.3.0-h1
+
+* Added the plugins [codemirror](https://github.com/w8tcha/CKEditor-CodeMirror-Plugin),
+  [wordcount](https://github.com/w8tcha/CKEditor-WordCount-Plugin) and [youtube](https://github.com/fonini/ckeditor-youtube-plugin).
+* Explicitly enabled all plugins shipped with Hippo CMS, disabled the rest.
+
 ## CKEditor 4.3
 
 New Features:
