@@ -20,6 +20,7 @@ var CKBUILDER_CONFIG = {
 		'.editorconfig',
 		'.gitignore',
 		'.gitattributes',
+		'.github',
 		'gruntfile.js',
 		'.idea',
 		'hippo-ckeditor.iml',
@@ -29,11 +30,14 @@ var CKBUILDER_CONFIG = {
 		'.jshintrc',
 		'less',
 		'.mailmap',
+		'node',
 		'node_modules',
 		'.npmrc',
 		'package.json',
 		'package-lock.json',
 		'README.md',
+		'samples',
+		'target',
 		'tests'
 	],
 	plugins: {
