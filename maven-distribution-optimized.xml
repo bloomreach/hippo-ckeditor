@@ -15,13 +15,14 @@
     <fileSet>
       <directory>dev/builder/release/ckeditor</directory>
       <outputDirectory>ckeditor/optimized</outputDirectory>
-      <excludes>
-        <exclude>config/**</exclude>
-        <exclude>config.js</exclude>
-        <exclude>LICENSE.md</exclude>
-        <exclude>target/**</exclude>
-        <exclude>*.xml</exclude>
-      </excludes>
+      <includes>
+        <include>ckeditor.js</include>
+        <include>contents.css</include>
+        <include>lang/*.js</include>
+        <include>plugins/**</include>
+        <include>skins/**</include>
+        <include>styles.js</include>
+      </includes>
     </fileSet>
   </fileSets>
   <files>
