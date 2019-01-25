@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2014-2018 Hippo B.V. (http://www.onehippo.com)
+  Copyright 2014-2019 Hippo B.V. (http://www.onehippo.com)
   For licensing, see LICENSE.md or http://ckeditor.com/license
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -94,12 +94,12 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>npm install</id>
+						<id>npm ci</id>
 						<goals>
 							<goal>npm</goal>
 						</goals>
 						<configuration>
-							<arguments>install --prod</arguments>
+							<arguments>ci</arguments>
 						</configuration>
 					</execution>
 				</executions>
