@@ -13,7 +13,7 @@ The following external plugins are included:
   - [codemirror](https://github.com/onehippo/CKEditor-CodeMirror-Plugin)
   - [textselection](https://github.com/onehippo/CKEditor-TextSelection-Plugin)
   - [wordcount](https://github.com/onehippo/CKEditor-WordCount-Plugin)
-  - [youtube](https://github.com/onehippo/ckeditor-youtube-plugin)
+  - [youtube](https://github.com/fonini/ckeditor-youtube-plugin)
 
 ## Versions
 
