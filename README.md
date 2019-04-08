@@ -10,10 +10,10 @@ The code for the hippopicker plugin resides in the hippo-cms project.
 
 The following external plugins are included:
 
-  - [codemirror](https://github.com/onehippo/CKEditor-CodeMirror-Plugin)
-  - [textselection](https://github.com/onehippo/CKEditor-TextSelection-Plugin)
-  - [wordcount](https://github.com/onehippo/CKEditor-WordCount-Plugin)
-  - [youtube](https://github.com/onehippo/ckeditor-youtube-plugin)
+  - [codemirror](https://github.com/w8tcha/CKEditor-CodeMirror-Plugin)
+  - [textselection](https://code.onehippo.org/cms-community-dev/ckeditor-textselection-plugin)
+  - [wordcount](https://github.com/w8tcha/CKEditor-WordCount-Plugin)
+  - [youtube](https://github.com/fonini/ckeditor-youtube-plugin)
 
 ## Versions
 

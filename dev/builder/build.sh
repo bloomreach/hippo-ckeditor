@@ -63,9 +63,9 @@ echo ""
 echo "Starting CKBuilder..."
 
 echo "Copy external plugins from node_modules..."
-cp -r ../../node_modules/hippo-ckeditor-codemirror-plugin/codemirror ../../plugins/
-cp -r ../../node_modules/hippo-ckeditor-textselection-plugin/textselection ../../plugins/
-cp -r ../../node_modules/hippo-ckeditor-wordcount-plugin/wordcount ../../plugins/
+cp -r ../../node_modules/ckeditor-codemirror-plugin/codemirror ../../plugins/
+cp -r ../../node_modules/@bloomreach/hippo-ckeditor-textselection-plugin/textselection ../../plugins/
+cp -r ../../node_modules/ckeditor-wordcount-plugin/wordcount ../../plugins/
 cp -r ../../node_modules/ckeditor-youtube-plugin/youtube ../../plugins/
 
 JAVA_ARGS=${ARGS// -t / } # Remove -t from args
