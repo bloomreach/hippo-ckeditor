@@ -4,9 +4,9 @@
 	"private": true,
 	"description": "The development version of CKEditor - JavaScript WYSIWYG web text editor.",
 	"dependencies": {
-		"@bloomreach/hippo-ckeditor-textselection-plugin": "1.6.1",
 		"@bloomreach/hippo-ckeditor-youtube-plugin": "2.1.13-h1",
 		"ckeditor-codemirror-plugin": "github:w8tcha/CKEditor-CodeMirror-Plugin#v1.17.10",
+		"ckeditor-textselection-plugin": "github:w8tcha/CKEditor-TextSelection-Plugin#42beb1fd401d292487bbde319086d3b662340589",
 		"ckeditor-wordcount-plugin": "github:w8tcha/CKEditor-WordCount-Plugin#v1.17.4"
 	},
 	"scripts": {
