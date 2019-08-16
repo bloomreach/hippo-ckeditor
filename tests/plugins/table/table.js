@@ -153,7 +153,34 @@
 				'</table>' );
 
 			assert.isTrue( /border="1"/.test( bot.editor.getData() ), 'Border attribute should be one' );
+		},
+
+		// (#1397)
+		'test table dialog error when only row is header': function() {
+			var bot = this.editorBots.editor;
+
+			bot.setHtmlWithSelection(
+				'<table border="1" cellspacing="1" cellpadding="1" style="width:500px;">' +
+					'<thead>' +
+						'<tr>' +
+							'<th>^<br></th>' +
+							'<th><br></th>' +
+						'</tr>' +
+					'</thead>' +
+					'<tbody>' +
+					'</tbody>' +
+				'</table>'
+			);
+
+			bot.dialog( 'tableProperties', function( dialog ) {
+				dialog.setValueOf( 'info', 'selHeaders', 'none' );
+
+				dialog.fire( 'ok' );
+				dialog.hide();
+
+				assert.isNull( dialog.parts.dialog.findOne( 'th' ) );
+				assert.isTrue( !!dialog.parts.dialog.findOne( 'td' ) );
+			} );
 		}
 	} );
-
 } )();

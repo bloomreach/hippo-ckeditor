@@ -421,8 +421,7 @@
 	function initPasteClipboard( editor ) {
 		var clipboard = CKEDITOR.plugins.clipboard,
 			preventBeforePasteEvent = 0,
-			preventPasteEvent = 0,
-			inReadOnly = 0;
+			preventPasteEvent = 0;
 
 		addListeners();
 		addButtonsCommands();
@@ -552,15 +551,11 @@
 			editor.on( 'contentDom', addPasteListenersToEditable );
 
 			// For improved performance, we're checking the readOnly state on selectionChange instead of hooking a key event for that.
-			editor.on( 'selectionChange', function( evt ) {
-				inReadOnly = evt.data.selection.getRanges()[ 0 ].checkReadOnly();
-				setToolbarStates();
-			} );
+			editor.on( 'selectionChange', setToolbarStates );
 
 			// If the "contextmenu" plugin is loaded, register the listeners.
 			if ( editor.contextMenu ) {
-				editor.contextMenu.addListener( function( element, selection ) {
-					inReadOnly = selection.getRanges()[ 0 ].checkReadOnly();
+				editor.contextMenu.addListener( function() {
 					return {
 						cut: stateFromNamedCommand( 'cut' ),
 						copy: stateFromNamedCommand( 'copy' ),
@@ -738,9 +733,7 @@
 			// since editable won't fire the event if selection process started within
 			// iframe and ended out of the editor (https://dev.ckeditor.com/ticket/9851).
 			editable.attachListener( CKEDITOR.env.ie ? editable : editor.document.getDocumentElement(), 'mouseup', function() {
-				mouseupTimeout = setTimeout( function() {
-					setToolbarStates();
-				}, 0 );
+				mouseupTimeout = setTimeout( setToolbarStates, 0 );
 			} );
 
 			// Make sure that deferred mouseup callback isn't executed after editor instance
@@ -1222,11 +1215,18 @@
 		}
 
 		function stateFromNamedCommand( command ) {
-			if ( inReadOnly && command in { paste: 1, cut: 1 } )
-				return CKEDITOR.TRISTATE_DISABLED;
+			var selection = editor.getSelection(),
+				range = selection && selection.getRanges()[ 0 ],
+				// We need to correctly update toolbar states on readOnly (#2775).
+				inReadOnly = editor.readOnly || ( range && range.checkReadOnly() );
 
-			if ( command == 'paste' )
+			if ( inReadOnly && command in { paste: 1, cut: 1 } ) {
+				return CKEDITOR.TRISTATE_DISABLED;
+			}
+
+			if ( command == 'paste' ) {
 				return CKEDITOR.TRISTATE_OFF;
+			}
 
 			// Cut, copy - check if the selection is not empty.
 			var sel = editor.getSelection(),
@@ -1631,7 +1631,7 @@
 		 * shows the security dialog window when the script tries to set clipboard data and on iOS, because custom data is
 		 * not saved to clipboard there.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @readonly
 		 * @property {Boolean}
 		 */
@@ -1640,7 +1640,7 @@
 		/**
 		 * True if the environment supports MIME types and custom data types in dataTransfer/cliboardData getData/setData methods.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @readonly
 		 * @property {Boolean}
 		 */
@@ -1649,7 +1649,7 @@
 		/**
 		 * True if the environment supports File API.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @readonly
 		 * @property {Boolean}
 		 */
@@ -1664,7 +1664,7 @@
 		 * which will handle pasting from e.g. browsers' menu bars.
 		 * IE7/8 does not like the {@link CKEDITOR.editor#paste} event for which it is throwing random errors.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @readonly
 		 * @property {String}
 		 */
@@ -1745,7 +1745,7 @@
 		/**
 		 * Returns the element that should be used as the target for the drop event.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @param {CKEDITOR.editor} editor The editor instance.
 		 * @returns {CKEDITOR.dom.domObject} the element that should be used as the target for the drop event.
 		 */
@@ -1788,7 +1788,7 @@
 		 *
 		 * **Note:** This function is in the public scope for tests usage only.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @private
 		 * @param {CKEDITOR.dom.range} dragRange The drag range.
 		 * @param {CKEDITOR.dom.range} dropRange The drop range.
@@ -1863,7 +1863,7 @@
 		 *
 		 * **Note:** This function is in the public scope for tests usage only.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @private
 		 * @param {CKEDITOR.dom.range} dragRange The first range to compare.
 		 * @param {CKEDITOR.dom.range} dropRange The second range to compare.
@@ -1908,7 +1908,7 @@
 		 *
 		 * **Note:** This function is in the public scope for tests usage only.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @private
 		 * @param {CKEDITOR.dom.range} dragRange The first range to compare.
 		 * @param {CKEDITOR.dom.range} dropRange The second range to compare.
@@ -1975,6 +1975,11 @@
 
 			// ...and paste content into the drop position.
 			dropRange = editor.createRange();
+			// Get actual selection with bookmarks if drop's bookmark are not in editable any longer.
+			// This might happen after extracting content from range (#2292).
+			if ( !dropBookmark.startNode.getCommonAncestor( editable ) ) {
+				dropBookmark = editor.getSelection().createBookmarks()[ 0 ];
+			}
 			dropRange.moveToBookmark( dropBookmark );
 
 			// We do not select drop range, because of may be in the place we can not set the selection
@@ -1987,7 +1992,7 @@
 		/**
 		 * Gets the range from the `drop` event.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @param {Object} domEvent A native DOM drop event object.
 		 * @param {CKEDITOR.editor} editor The source editor instance.
 		 * @returns {CKEDITOR.dom.range} range at drop position.
@@ -2154,7 +2159,7 @@
 		 * by its ID and a new instance is assigned to the `evt.data.dataTransfer` only if the ID changed or
 		 * the {@link #resetDragDataTransfer} method was called.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @param {CKEDITOR.dom.event} [evt] A drop event object.
 		 * @param {CKEDITOR.editor} [sourceEditor] The source editor instance.
 		 */
@@ -2196,7 +2201,7 @@
 		 * Removes the global {@link #dragData} so the next call to {@link #initDragDataTransfer}
 		 * always creates a new instance of {@link CKEDITOR.plugins.clipboard.dataTransfer}.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 */
 		resetDragDataTransfer: function() {
 			this.dragData = null;
@@ -2209,7 +2214,7 @@
 		 * Note: This object is global (meaning that it is not related to a single editor instance)
 		 * in order to handle drag and drop from one editor into another.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @private
 		 * @property {CKEDITOR.plugins.clipboard.dataTransfer} dragData
 		 */
@@ -2217,7 +2222,7 @@
 		/**
 		 * Range object to save the drag range and remove its content after the drop.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @private
 		 * @property {CKEDITOR.dom.range} dragRange
 		 */
@@ -2229,7 +2234,7 @@
 		 * so the method always returns a new object. The same happens if there is no paste event
 		 * passed to the method.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @param {CKEDITOR.dom.event} [evt] A paste event object.
 		 * @param {CKEDITOR.editor} [sourceEditor] The source editor instance.
 		 * @returns {CKEDITOR.plugins.clipboard.dataTransfer} The data transfer object.
@@ -2263,7 +2268,7 @@
 		/**
 		 * Prevents dropping on the specified element.
 		 *
-		 * @since 4.5
+		 * @since 4.5.0
 		 * @param {CKEDITOR.dom.element} element The element on which dropping should be disabled.
 		 */
 		preventDefaultDropOnElement: function( element ) {
@@ -2284,7 +2289,7 @@
 	 * Facade for the native `dataTransfer`/`clipboadData` object to hide all differences
 	 * between browsers.
 	 *
-	 * @since 4.5
+	 * @since 4.5.0
 	 * @class CKEDITOR.plugins.clipboard.dataTransfer
 	 * @constructor Creates a class instance.
 	 * @param {Object} [nativeDataTransfer] A native data transfer object.
@@ -2384,7 +2389,7 @@
 	 * Data transfer operation (drag and drop or copy and paste) started and ended in the same
 	 * editor instance.
 	 *
-	 * @since 4.5
+	 * @since 4.5.0
 	 * @readonly
 	 * @property {Number} [=1]
 	 * @member CKEDITOR
@@ -2395,7 +2400,7 @@
 	 * Data transfer operation (drag and drop or copy and paste) started in one editor
 	 * instance and ended in another.
 	 *
-	 * @since 4.5
+	 * @since 4.5.0
 	 * @readonly
 	 * @property {Number} [=2]
 	 * @member CKEDITOR
@@ -2406,7 +2411,7 @@
 	 * Data transfer operation (drag and drop or copy and paste) started outside of the editor.
 	 * The source of the data may be a textarea, HTML, another application, etc.
 	 *
-	 * @since 4.5
+	 * @since 4.5.0
 	 * @readonly
 	 * @property {Number} [=3]
 	 * @member CKEDITOR
@@ -2654,7 +2659,7 @@
 				return false;
 			}
 
-			CKEDITOR.tools.array.forEach( CKEDITOR.tools.objectKeys( this._.data ), function( type ) {
+			CKEDITOR.tools.array.forEach( CKEDITOR.tools.object.keys( this._.data ), function( type ) {
 				typesToCheck[ type ] = 1;
 			} );
 
@@ -2695,17 +2700,16 @@
 		 */
 		_getImageFromClipboard: function() {
 			var file;
-
-			if ( this.$ && this.$.items && this.$.items[ 0 ] ) {
-				try {
+			try {
+				if ( this.$ && this.$.items && this.$.items[ 0 ] ) {
 					file = this.$.items[ 0 ].getAsFile();
 					// Duck typing
 					if ( file && file.type ) {
 						return file;
 					}
-				} catch ( err ) {
-					// noop
 				}
+			} catch ( err ) {
+			// noop
 			}
 
 			return undefined;
@@ -3069,7 +3073,7 @@
 		 */
 		_applyDataComment: function( content, data ) {
 			var customData = '';
-			if ( data && CKEDITOR.tools.objectKeys( data ).length ) {
+			if ( data && CKEDITOR.tools.object.keys( data ).length ) {
 				customData = '<!--cke-data:' + encodeURIComponent( JSON.stringify( data ) ) + '-->';
 			}
 			return customData + ( content && content.length ? content : '' );
@@ -3092,7 +3096,7 @@
  * See also the {@link CKEDITOR.editor#paste} event and read more about the integration with clipboard
  * in the {@glink guide/dev_clipboard Clipboard Deep Dive guide}.
  *
- * @since 4.0
+ * @since 4.0.0
  * @cfg {'html'/'text'} [clipboard_defaultContentType='html']
  * @member CKEDITOR.config
  */
@@ -3109,7 +3113,7 @@
  * * the {@link CKEDITOR.editor#drop} event,
  * * the {@link CKEDITOR.plugins.clipboard.dataTransfer} class.
  *
- * @since 3.1
+ * @since 3.1.0
  * @event paste
  * @member CKEDITOR.editor
  * @param {CKEDITOR.editor} editor This editor instance.
@@ -3174,7 +3178,7 @@
  * * The {@link CKEDITOR.editor#dragstart} and {@link CKEDITOR.editor#dragend} events,
  * * The {@link CKEDITOR.plugins.clipboard.dataTransfer} class.
  *
- * @since 4.5
+ * @since 4.5.0
  * @event drop
  * @member CKEDITOR.editor
  * @param {CKEDITOR.editor} editor This editor instance.
@@ -3204,7 +3208,7 @@
  * * The {@link CKEDITOR.editor#drop} and {@link CKEDITOR.editor#dragend} events,
  * * The {@link CKEDITOR.plugins.clipboard.dataTransfer} class.
  *
- * @since 4.5
+ * @since 4.5.0
  * @event dragstart
  * @member CKEDITOR.editor
  * @param {CKEDITOR.editor} editor This editor instance.
@@ -3225,7 +3229,7 @@
  * * The {@link CKEDITOR.editor#drop} and {@link CKEDITOR.editor#dragend} events,
  * * The {@link CKEDITOR.plugins.clipboard.dataTransfer} class.
  *
- * @since 4.5
+ * @since 4.5.0
  * @event dragend
  * @member CKEDITOR.editor
  * @param {CKEDITOR.editor} editor This editor instance.
@@ -3281,7 +3285,7 @@
  * This setting defaults to `'semantic-content'` in Chrome, Opera and Safari (all Blink and Webkit based browsers)
  * due to messy HTML which these browsers keep in the clipboard. In other browsers it defaults to `null`.
  *
- * @since 4.5
+ * @since 4.5.0
  * @cfg {String} [pasteFilter='semantic-content' in Chrome and Safari and `null` in other browsers]
  * @member CKEDITOR.config
  */
@@ -3314,7 +3318,7 @@
  * it will also be applied to pasted and dropped data. The paste filter job is to "normalize"
  * external data which often needs to be handled differently than content produced by the editor.
  *
- * @since 4.5
+ * @since 4.5.0
  * @readonly
  * @property {CKEDITOR.filter} [pasteFilter]
  * @member CKEDITOR.editor
