@@ -35,13 +35,6 @@ To get upstream changes, first add a remote for the upstream CKEditor repository
 
     git remote add -f upstream https://github.com/ckeditor/ckeditor-dev.git
 
-Upstream changes can now be merged into the current hippo-specific branch. Make sure to merge the upstream branch
-with the same version number. For example:
-
-    git fetch upstream
-    git checkout hippo/4.9.x
-    git merge upstream/release/4.9.x
-
 When a new patch version is released upstream, its tag can be merged into the matching hippo-specific branch.
 For example, to merge upstream tag 4.9.3:
 
@@ -49,18 +42,24 @@ For example, to merge upstream tag 4.9.3:
     git checkout hippo/4.9.x
     git merge 4.9.3
 
-When a new minor version is released upstream, a new hippo-specific branch should be created based on the upstream
-branch. All hippo-specific customizations in the previous branch can then be merged into the new one. The new
-branch must be pushed to origin, so other people can fetch it too. For example, to upgrade from 4.9.x to 4.10.x:
+When a new minor version is released upstream, a new hippo-specific branch should be created based on the current latest
+hippo branch. The new upstream tag can then be merged into the new hippo branch. The new branch must be pushed to 
+origin, so other people can fetch it too. For example, to upgrade from 4.9.x to 4.10.0:
 
     git fetch upstream
-    git checkout release/4.10.x
+    git checkout hippo/4.9.x
     git checkout -b hippo/4.10.x
-    git merge hippo/4.9.x
-    git push origin hippo/4.10.x
+    git merge 4.10.0
+    git push origin -u hippo/4.10.x
 
 Update the version number of the project if necessary (e.g when moving from 4.9.2 to 4.9.3). Also update the 
-ckeditor version in the hippo-cms pom.
+ckeditor version in:
+ - pom.xml
+ - package-lock.json
+ - the hippo-cms pom (located in a different git repository)
+ 
+Add new branch to:
+ - Jenkinsfile
 
 ### How to check CKEditor version in the browser
 
