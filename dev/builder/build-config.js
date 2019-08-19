@@ -79,6 +79,7 @@ var CKBUILDER_CONFIG = {
 		horizontalrule: 1,
 		htmlwriter: 1,
 		iframe: 1,
+		iframedialog: 1,
 		image: 1,
 		image2: 1,
 		indent: 1,
