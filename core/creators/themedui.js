@@ -283,8 +283,10 @@ CKEDITOR.replaceClass = 'ckeditor';
 		// Set as border box width. (https://dev.ckeditor.com/ticket/5353)
 		outer.setSize( 'width', width, true );
 
+		// Commented this specific fix because it caused a resize loop when ckeditor was
+		// loaded inside an iframe and the divarea plugin was used (1/2) (https://issues.onehippo.com/browse/CMS-12407)
 		// WebKit needs to refresh the iframe size to avoid rendering issues. (1/2) (https://dev.ckeditor.com/ticket/8348)
-		contentsFrame && ( contentsFrame.style.width = '1%' );
+		// contentsFrame && ( contentsFrame.style.width = '1%' );
 
 		// Get the height delta between the outer table and the content area.
 		var contentsOuterDelta = ( outer.$.offsetHeight || 0 ) - ( contents.$.clientHeight || 0 ),
@@ -295,8 +297,10 @@ CKEDITOR.replaceClass = 'ckeditor';
 
 		contents.setStyle( 'height', resultContentsHeight + 'px' );
 
+		// Commented this specific fix because it caused a resize loop when ckeditor was
+		// loaded inside an iframe and the divarea plugin was used (2/2) (https://issues.onehippo.com/browse/CMS-12407)
 		// WebKit needs to refresh the iframe size to avoid rendering issues. (2/2) (https://dev.ckeditor.com/ticket/8348)
-		contentsFrame && ( contentsFrame.style.width = '100%' );
+		// contentsFrame && ( contentsFrame.style.width = '100%' );
 
 		// Emit a resize event.
 		this.fire( 'resize', {
