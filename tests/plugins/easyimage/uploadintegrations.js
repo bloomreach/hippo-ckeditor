@@ -56,7 +56,7 @@
 				this.editor.widgets.registered.easyimage.loaderType = AsyncSuccessFileLoader;
 
 				this.editor.on( 'fileUploadResponse', function( evt ) {
-					// Prevent this guy from picking up https://github.com/ckeditor/ckeditor-dev/blob/565d9c3a3613f35167d6555123b6ca316ead7ab9/plugins/filetools/plugin.js#L93-L122
+					// Prevent this guy from picking up https://github.com/ckeditor/ckeditor4/blob/565d9c3a3613f35167d6555123b6ca316ead7ab9/plugins/filetools/plugin.js#L93-L122
 					// it would complain about missing uploaded/error properties.
 					evt.cancel();
 				}, null, null, 5 );
@@ -257,7 +257,12 @@
 				assertPasteFiles( editor, {
 					files: [ bender.tools.getTestPngFile() ],
 					callback: function() {
-						assert.beautified.html( CKEDITOR.document.getById( 'expected-progress-bar-downcast' ).getHtml(), editor.getData() );
+						var expected = CKEDITOR.document.getById( 'expected-progress-bar-downcast' ).getHtml(),
+							// In Edge 18 test callback is fired before image width can be set.
+							// Remove width attribute as it's irrelevant to this TC (#2057).
+							actual = editor.getData().replace( 'width="163"', '' );
+
+						assert.beautified.html( expected, actual );
 					}
 				} );
 			},

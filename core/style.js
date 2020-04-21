@@ -680,7 +680,7 @@ CKEDITOR.STYLE_OBJECT = 3;
 	 * The only style handler which can be implemented from scratch without huge effort is a style
 	 * applicable to objects ({@glink features/styles#style-types read more about types}).
 	 * Such style can only be applied when a specific object is selected. An example implementation can
-	 * be found in the [widget plugin](https://github.com/ckeditor/ckeditor-dev/blob/master/plugins/widget/plugin.js).
+	 * be found in the [widget plugin](https://github.com/ckeditor/ckeditor4/blob/master/plugins/widget/plugin.js).
 	 *
 	 * When implementing a style handler from scratch at least the following methods must be defined:
 	 *
@@ -1830,25 +1830,13 @@ CKEDITOR.STYLE_OBJECT = 3;
 	function applyStyleOnSelection( selection, remove, editor ) {
 		var ranges = selection.getRanges(),
 			func = remove ? this.removeFromRange : this.applyToRange,
-			originalRanges,
-			range,
-			i;
-
-		// In case of fake table selection, we would like to apply all styles and then select
-		// the original ranges. Otherwise browsers would complain about discontiguous selection.
-		if ( selection.isFake && selection.isInTable() ) {
-			originalRanges = [];
-
-			for ( i = 0; i < ranges.length; i++ ) {
-				originalRanges.push( ranges[ i ].clone() );
-			}
-		}
+			range;
 
 		var iterator = ranges.createIterator();
 		while ( ( range = iterator.getNextRange() ) )
 			func.call( this, range, editor );
 
-		selection.selectRanges( originalRanges || ranges );
+		selection.selectRanges( ranges );
 	}
 } )();
 

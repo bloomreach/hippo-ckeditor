@@ -158,7 +158,7 @@
 						dataTransfer = dataObj.dataTransfer;
 
 					// If data empty check for image content inside data transfer. https://dev.ckeditor.com/ticket/16705
-					if ( !data && dataObj.method == 'paste' && dataTransfer && dataTransfer.getFilesCount() == 1 && latestId != dataTransfer.id ) {
+					if ( !data && dataObj.method == 'paste' && isFileData( dataTransfer ) ) {
 						var file = dataTransfer.getFile( 0 );
 
 						if ( CKEDITOR.tools.indexOf( supportedImageTypes, file.type ) != -1 ) {
@@ -188,6 +188,20 @@
 						}
 					}
 				}, null, null, 1 );
+			}
+
+			// Only dataTransfer objects containing only file should be considered
+			// to image pasting (#3585, #3625).
+			function isFileData( dataTransfer ) {
+				if ( !dataTransfer || latestId === dataTransfer.id ) {
+					return false;
+				}
+
+				var types = dataTransfer.getTypes(),
+					isFileOnly = types.length === 1 && types[ 0 ] === 'Files',
+					containsFile = dataTransfer.getFilesCount() === 1;
+
+				return isFileOnly && containsFile;
 			}
 
 			editor.on( 'paste', function( evt ) {
@@ -1203,8 +1217,9 @@
 		}
 
 		function setToolbarStates() {
-			if ( editor.mode != 'wysiwyg' )
+			if ( editor.mode != 'wysiwyg' ) {
 				return;
+			}
 
 			var pasteState = stateFromNamedCommand( 'paste' );
 
@@ -1508,6 +1523,11 @@
 				// Cancel native drop.
 				evt.data.preventDefault();
 
+				// We shouldn't start drop action when editor is in read only mode (#808).
+				if ( editor.readOnly ) {
+					return;
+				}
+
 				var target = evt.data.getTarget(),
 					readOnly = target.isReadOnly();
 
@@ -1627,15 +1647,26 @@
 	 */
 	CKEDITOR.plugins.clipboard = {
 		/**
-		 * True if the environment allows to set data on copy or cut manually. This value is false in IE, because this browser
-		 * shows the security dialog window when the script tries to set clipboard data and on iOS, because custom data is
-		 * not saved to clipboard there.
+		 * It returns `true` if the environment allows to set the data on copy or cut manually. This value is `false` in:
+		 * * Internet Explorer &mdash; because this browser shows the security dialog window when the script tries to set clipboard data.
+		 * * Older iOS (below version 13) &mdash; because custom data is not saved to clipboard there.
 		 *
 		 * @since 4.5.0
 		 * @readonly
 		 * @property {Boolean}
 		 */
-		isCustomCopyCutSupported: ( !CKEDITOR.env.ie || CKEDITOR.env.version >= 16 ) && !CKEDITOR.env.iOS,
+		isCustomCopyCutSupported: ( function() {
+			if ( CKEDITOR.env.ie && CKEDITOR.env.version < 16 ) {
+				return false;
+			}
+
+			// There might be lower version supported as well. However, we don't have possibility to test it (#3354).
+			if ( CKEDITOR.env.iOS && CKEDITOR.env.version < 605 ) {
+				return false;
+			}
+
+			return true;
+		} )(),
 
 		/**
 		 * True if the environment supports MIME types and custom data types in dataTransfer/cliboardData getData/setData methods.
@@ -1674,7 +1705,7 @@
 		 * Adds a new paste button to the editor.
 		 *
 		 * This method should be called for buttons that should display the Paste Dialog fallback in mobile environments.
-		 * See [the rationale](https://github.com/ckeditor/ckeditor-dev/issues/595#issuecomment-345971174) for more
+		 * See [the rationale](https://github.com/ckeditor/ckeditor4/issues/595#issuecomment-345971174) for more
 		 * details.
 		 *
 		 * @since 4.9.0
@@ -1723,8 +1754,12 @@
 			}
 
 			// Safari fixed clipboard in 10.1 (https://bugs.webkit.org/show_bug.cgi?id=19893) (https://dev.ckeditor.com/ticket/16982).
-			// However iOS version still doesn't work well enough (https://bugs.webkit.org/show_bug.cgi?id=19893#c34).
 			if ( CKEDITOR.env.safari && CKEDITOR.env.version >= 603 && !CKEDITOR.env.iOS ) {
+				return true;
+			}
+
+			// Issue doesn't occur any longer in new iOS version (https://bugs.webkit.org/show_bug.cgi?id=19893#c34) (#3354).
+			if ( CKEDITOR.env.iOS && CKEDITOR.env.version >= 605 ) {
 				return true;
 			}
 
@@ -2304,7 +2339,7 @@
 		this._ = {
 			metaRegExp: /^<meta.*?>/i,
 			bodyRegExp: /<body(?:[\s\S]*?)>([\s\S]*)<\/body>/i,
-			fragmentRegExp: /<!--(?:Start|End)Fragment-->/g,
+			fragmentRegExp: /\s*<!--StartFragment-->|<!--EndFragment-->\s*/g,
 
 			data: {},
 			files: [],
@@ -2692,6 +2727,20 @@
 		},
 
 		/**
+		 * Returns all MIME types inside the clipboard data.
+		 *
+		 * @since 4.13.1
+		 * @returns {String[]}
+		 */
+		getTypes: function() {
+			if ( !this.$ || !this.$.types ) {
+				return [];
+			}
+
+			return [].slice.call( this.$.types );
+		},
+
+		/**
 		 * When the content of the clipboard is pasted in Chrome, the clipboard data object has an empty `files` property,
 		 * but it is possible to get the file as `items[0].getAsFile();` (https://dev.ckeditor.com/ticket/12961).
 		 *
@@ -2753,7 +2802,7 @@
 	/**
 	 * Fallback dataTransfer object which is used together with {@link CKEDITOR.plugins.clipboard.dataTransfer}
 	 * for browsers supporting Clipboard API, but not supporting custom
-	 * MIME types (Edge 16+, see [ckeditor-dev/issues/#962](https://github.com/ckeditor/ckeditor-dev/issues/962)).
+	 * MIME types (Edge 16+, see [ckeditor4/issues/#962](https://github.com/ckeditor/ckeditor4/issues/962)).
 	 *
 	 * @since 4.8.0
 	 * @class CKEDITOR.plugins.clipboard.fallbackDataTransfer
