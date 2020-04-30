@@ -102,6 +102,7 @@ var CKBUILDER_CONFIG = {
 		panelbutton: 1,
 		pastefromword: 1,
 		pastetext: 1,
+		pastetools: 1,
 		placeholder: 1,
 		popup: 1,
 		removeformat: 1,
