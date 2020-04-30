@@ -71,7 +71,7 @@ Open the devtools / console and type on the console command line:
 
 Prerequisites:
 
-  - [NodeJS (8.x.x)](https://nodejs.org/)
+  - [NodeJS](https://nodejs.org/)
   - [npm](https://www.npmjs.com/)
   - [Maven](http://maven.apache.org/)
 

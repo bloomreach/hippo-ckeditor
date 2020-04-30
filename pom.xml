@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2014-2019 Hippo B.V. (http://www.onehippo.com)
+  Copyright 2014-2020 Hippo B.V. (http://www.onehippo.com)
   For licensing, see LICENSE.md or http://ckeditor.com/license
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -9,14 +9,14 @@
   <parent>
     <groupId>org.onehippo.cms7</groupId>
     <artifactId>hippo-cms7-project</artifactId>
-    <version>30.1.1</version>
+    <version>31.2.0-SNAPSHOT</version>
     <relativePath />
   </parent>
 
   <name>Hippo CKEditor</name>
   <description>CKEditor for Hippo CMS</description>
   <artifactId>hippo-ckeditor</artifactId>
-  <version>4.12.1-h3-SNAPSHOT</version>
+  <version>4.13.1-h1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
 	<scm>
@@ -38,12 +38,6 @@
 			</releases>
 		</repository>
 	</repositories>
-
-	<properties>
-		<maven.plugin.frontend.version>1.6</maven.plugin.frontend.version>
-		<nodejs.version>v8.13.0</nodejs.version>
-		<npm.version>6.4.1</npm.version>
-	</properties>
 
 	<build>
 		<defaultGoal>package</defaultGoal>
