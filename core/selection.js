@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -68,6 +68,10 @@
 		}
 
 		return true;
+	}
+
+	function isSupportingTableSelectionPlugin( editor ) {
+		return editor && editor.plugins.tableselection && editor.plugins.tableselection.isSupportedEnvironment( editor );
 	}
 
 	// After performing fake table selection, the real selection is limited
@@ -1971,7 +1975,7 @@
 			var editor = this.root.editor;
 
 			// Use fake selection on tables only with tableselection plugin (#3136).
-			if ( editor.plugins.tableselection && isTableSelection( ranges ) ) {
+			if ( isSupportingTableSelectionPlugin( editor ) && isTableSelection( ranges ) ) {
 				// Tables have it's own selection method.
 				performFakeTableSelection.call( this, ranges );
 				return;
@@ -2082,8 +2086,7 @@
 			}
 
 			// Handle special case - fake selection of table cells.
-			if ( editor && editor.plugins.tableselection &&
-				editor.plugins.tableselection.isSupportedEnvironment() &&
+			if ( isSupportingTableSelectionPlugin( editor ) &&
 				isTableSelection( ranges ) && !isSelectingTable &&
 				!ranges[ 0 ]._getTableElement( { table: 1 } ).hasAttribute( 'data-cke-tableselection-ignored' )
 			) {
@@ -2492,8 +2495,9 @@
 		 */
 		scrollIntoView: function() {
 			// Scrolls the first range into view.
-			if ( this.type != CKEDITOR.SELECTION_NONE )
+			if ( this.getType() != CKEDITOR.SELECTION_NONE ) {
 				this.getRanges()[ 0 ].scrollIntoView();
+			}
 		},
 
 		/**

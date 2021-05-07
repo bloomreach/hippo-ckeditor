@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -288,6 +288,10 @@
 		 * This method is triggered by the {@link #event-checkSelection} event.
 		 */
 		checkSelection: function() {
+			if ( !this.editor.getSelection() ) {
+				return;
+			}
+
 			var sel = this.editor.getSelection(),
 				selectedElement = sel.getSelectedElement(),
 				updater = stateUpdater( this ),
@@ -1924,11 +1928,19 @@
 			}
 			this._.initialSetData = false;
 
+			// Unescape protected content to prevent double escaping and corruption of content.
+			// This can be done by transforming the content to data format and then back to input HTML (#4060).
+			data = this.editor.dataProcessor.toDataFormat( data, {
+				context: this.getName(),
+				filter: this.filter,
+				enterMode: this.enterMode
+			} );
 			data = this.editor.dataProcessor.toHtml( data, {
 				context: this.getName(),
 				filter: this.filter,
 				enterMode: this.enterMode
 			} );
+
 			this.setHtml( data );
 
 			this.editor.widgets.initOnAll( this );
@@ -2633,7 +2645,7 @@
 
 			// Add support for dropping selection containing more than widget itself
 			// or more than one widget (#3441).
-			if ( !id && editor.widgets.selected.length > 0 ) {
+			if ( id === '' && editor.widgets.selected.length > 0 ) {
 				evt.data.dataTransfer.setData( 'text/html', getClipboardHtml( editor ) );
 				return;
 			}
@@ -2916,10 +2928,12 @@
 		// It's not possible to manually create selection which starts inside one widget and ends in another,
 		// so we are skipping this case to simplify implementation (#3498).
 		function fixCrossContentSelection() {
-			var selection = editor.getSelection(),
-				ranges = selection && selection.getRanges(),
-				range = ranges[ 0 ];
+			var selection = editor.getSelection();
+			if ( !selection ) {
+				return;
+			}
 
+			var range = selection.getRanges()[ 0 ];
 			if ( !range || range.collapsed ) {
 				return;
 			}
