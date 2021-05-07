@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2014-2020 Hippo B.V. (http://www.onehippo.com)
+  Copyright 2014-2021 Hippo B.V. (http://www.onehippo.com)
   For licensing, see LICENSE.md or http://ckeditor.com/license
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -16,7 +16,7 @@
   <name>Hippo CKEditor</name>
   <description>CKEditor for Hippo CMS</description>
   <artifactId>hippo-ckeditor</artifactId>
-  <version>4.14.0-h2-SNAPSHOT</version>
+  <version>4.16.0-h1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
 	<scm>
