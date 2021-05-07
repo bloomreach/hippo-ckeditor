@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 Hippo B.V. (http://www.onehippo.com)
+ * Copyright 2018-2021 Hippo B.V. (http://www.onehippo.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-cmsPipeline(deployBranches: ["hippo/4.5.x","hippo/4.9.x","hippo/4.11.x", "hippo/4.12.x", "hippo/4.13.x", "hippo/4.14.x"])
+cmsPipeline(deployBranches: ["hippo/4.5.x","hippo/4.9.x","hippo/4.11.x", "hippo/4.12.x", "hippo/4.13.x", "hippo/4.14.x", "hippo/4.16.x"])
