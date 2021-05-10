@@ -19,11 +19,10 @@
   <version>4.16.0-h1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-	<scm>
-		<connection>scm:git:git@code.onehippo.org:cms-community/hippo-ckeditor.git</connection>
-		<developerConnection>scm:git:git@code.onehippo.org:cms-community/hippo-ckeditor.git</developerConnection>
-		<url>https://code.onehippo.org/cms-community/hippo-ckeditor</url>
-		<tag>HEAD</tag>
+  <scm>
+    <connection>scm:git:https://code.bloomreach.com/engineering/xm/hippo-ckeditor.git</connection>
+    <developerConnection>scm:git:git@code-ssh.bloomreach.com:engineering/xm/hippo-ckeditor.git</developerConnection>
+    <url>https://code.bloomreach.com/engineering/xm/hippo-ckeditor</url>
 	</scm>
 	<repositories>
 		<repository>
