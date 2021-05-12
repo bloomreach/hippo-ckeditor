@@ -1,38 +1,38 @@
 {
-	"name": "ckeditor4-dev",
-	"version": "4.16.0",
-	"private": true,
-	"description": "The development version of CKEditor - JavaScript WYSIWYG web text editor.",
-	"dependencies": {
-		"ckeditor-codemirror-plugin": "github:w8tcha/CKEditor-CodeMirror-Plugin#v1.17.10",
-		"ckeditor-textselection-plugin": "github:w8tcha/CKEditor-TextSelection-Plugin#42beb1fd401d292487bbde319086d3b662340589",
-		"ckeditor-wordcount-plugin": "github:w8tcha/CKEditor-WordCount-Plugin#v1.17.8",
-		"ckeditor-youtube-plugin": "2.1.19"
-	},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"keywords": [
-		"ckeditor4",
-		"ckeditor",
-		"fckeditor",
-		"editor",
-		"wysiwyg",
-		"html",
-		"richtext",
-		"text",
-		"javascript"
-	],
-	"engines": {
-		"node": ">=12",
-		"npm": ">=6"
-	},
-	"author": "CKSource (https://cksource.com/)",
-	"license": "(GPL-2.0-or-later OR LGPL-2.1 OR MPL-1.1)",
-	"bugs": "https://github.com/ckeditor/ckeditor4/issues",
-	"homepage": "https://ckeditor.com",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ckeditor/ckeditor4.git"
-	}
+  "name": "ckeditor4-dev",
+  "version": "4.16.0",
+  "private": true,
+  "description": "The development version of CKEditor - JavaScript WYSIWYG web text editor.",
+  "dependencies": {
+	"@bloomreach/hippo-ckeditor-youtube-plugin": "2.1.13-h1",
+	"ckeditor-codemirror-plugin": "github:w8tcha/CKEditor-CodeMirror-Plugin#v1.17.10",
+	"ckeditor-textselection-plugin": "github:w8tcha/CKEditor-TextSelection-Plugin#42beb1fd401d292487bbde319086d3b662340589",
+	"ckeditor-wordcount-plugin": "github:w8tcha/CKEditor-WordCount-Plugin#v1.17.8"
+  },
+  "scripts": {
+	"test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+	"ckeditor4",
+	"ckeditor",
+	"fckeditor",
+	"editor",
+	"wysiwyg",
+	"html",
+	"richtext",
+	"text",
+	"javascript"
+  ],
+  "engines": {
+	"node": ">=12",
+	"npm": ">=6"
+  },
+  "author": "CKSource (https://cksource.com/)",
+  "license": "(GPL-2.0-or-later OR LGPL-2.1 OR MPL-1.1)",
+  "bugs": "https://github.com/ckeditor/ckeditor4/issues",
+  "homepage": "https://ckeditor.com",
+  "repository": {
+	"type": "git",
+	"url": "https://github.com/ckeditor/ckeditor4.git"
+  }
 }
