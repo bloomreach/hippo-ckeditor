@@ -1218,7 +1218,8 @@
 							startPath = range.startPath();
 
 						if ( range.collapsed ) {
-							if ( !mergeBlocksCollapsedSelection( editor, range, backspace, startPath ) ) {
+							// Skip inner range trimming (#3819).
+							if ( !mergeBlocksCollapsedSelection( editor, range, backspace, startPath, true ) ) {
 								return;
 							}
 						} else {
@@ -1647,7 +1648,9 @@
 		// guarantee it's result to be a valid DOM tree.
 		function insert( editable, type, data, range ) {
 			var editor = editable.editor,
-				dontFilter = false;
+				dontFilter = false,
+				html,
+				isEmptyEditable;
 
 			if ( type == 'unfiltered_html' ) {
 				type = 'html';
@@ -1685,9 +1688,17 @@
 
 			prepareRangeToDataInsertion( that );
 
+			html = editable.getHtml(),
+			// Instead of getData method, we directly check the HTML
+			// due to the fact that internal getData operates on latest snapshot,
+			// not the current content.
+			// Checking it after clearing the range's content will give the
+			// most correct results (#4301).
+			isEmptyEditable = html === '' || html.match( emptyParagraphRegexp );
+
 			// When enter mode is set to div and content wrapped with div is pasted,
-			// we must ensure that no additional divs are created (#2751, #3379).
-			if ( editor.enterMode === CKEDITOR.ENTER_DIV && editor.getData( true ) === '' ) {
+			// we must ensure that no additional divs are created (#2751).
+			if ( editor.enterMode === CKEDITOR.ENTER_DIV && isEmptyEditable ) {
 				clearEditable( editable, range );
 			}
 
@@ -2546,7 +2557,7 @@
 		};
 	} )();
 
-	function mergeBlocksCollapsedSelection( editor, range, backspace, startPath ) {
+	function mergeBlocksCollapsedSelection( editor, range, backspace, startPath, skipRangeTrimming ) {
 		var startBlock = startPath.block;
 
 		// Selection must be collapsed and to be anchored in a block.
@@ -2555,7 +2566,7 @@
 
 		// Exclude cases where, i.e. if pressed arrow key, selection
 		// would move within the same block (merge inside a block).
-		if ( !range[ backspace ? 'checkStartOfBlock' : 'checkEndOfBlock' ]() )
+		if ( !range[ backspace ? 'checkStartOfBlock' : 'checkEndOfBlock' ]( skipRangeTrimming ) )
 			return false;
 
 		// Make sure, there's an editable position to put selection,
