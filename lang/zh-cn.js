@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -19,6 +19,7 @@
  */
 CKEDITOR.lang[ 'zh-cn' ] = {
 	// ARIA description.
+	application: 'Rich Text Editor', // MISSING
 	editor: '所见即所得编辑器',
 	editorPanel: '所见即所得编辑器面板',
 
@@ -34,7 +35,6 @@ CKEDITOR.lang[ 'zh-cn' ] = {
 		upload: '上传',
 		uploadSubmit: '上传到服务器',
 		image: '图像',
-		flash: 'Flash',
 		form: '表单',
 		checkbox: '复选框',
 		radio: '单选按钮',

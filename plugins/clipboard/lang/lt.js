@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
 For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 CKEDITOR.plugins.setLang( 'clipboard', 'lt', {
@@ -10,5 +10,7 @@ CKEDITOR.plugins.setLang( 'clipboard', 'lt', {
 	paste: 'Įdėti',
 	pasteNotification: 'Spauskite %1 kad įkliuotumėte. Jūsų naršyklė nepalaiko įklijavimo paspaudus mygtuką arba kontekstinio menių galimybės.',
 	pasteArea: 'Įkelti dalį',
-	pasteMsg: 'Įklijuokite savo turinį į žemiau esantį lauką ir paspauskite OK.'
+	pasteMsg: 'Įklijuokite savo turinį į žemiau esantį lauką ir paspauskite OK.',
+	fileFormatNotSupportedNotification: 'The ${formats} file format(s) are not supported.', // MISSING
+	fileWithoutFormatNotSupportedNotification: 'The file format is not supported.' // MISSING
 } );

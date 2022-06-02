@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -19,6 +19,7 @@
  */
 CKEDITOR.lang[ 'hu' ] = {
 	// ARIA description.
+	application: 'Rich Text Editor', // MISSING
 	editor: 'HTML szerkesztő',
 	editorPanel: 'HTML szerkesztő panel',
 
@@ -34,7 +35,6 @@ CKEDITOR.lang[ 'hu' ] = {
 		upload: 'Feltöltés',
 		uploadSubmit: 'Küldés a szerverre',
 		image: 'Kép',
-		flash: 'Flash',
 		form: 'Űrlap',
 		checkbox: 'Jelölőnégyzet',
 		radio: 'Választógomb',

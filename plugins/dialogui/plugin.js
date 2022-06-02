@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -151,7 +151,8 @@ CKEDITOR.plugins.add( 'dialogui', {
 								'<label class="cke_dialog_ui_labeled_label' + requiredClass + '" ', ' id="' + _.labelId + '"',
 									( _.inputId ? ' for="' + _.inputId + '"' : '' ),
 									( elementDefinition.labelStyle ? ' style="' + elementDefinition.labelStyle + '"' : '' ) + '>',
-									elementDefinition.label,
+									// If label is required add asterisk. #3433)
+									( elementDefinition.required ? elementDefinition.label + '<span class="cke_dialog_ui_labeled_required" aria-hidden="true">*</span>' : elementDefinition.label ),
 								'</label>',
 								'<div class="cke_dialog_ui_labeled_content"',
 									( elementDefinition.controlStyle ? ' style="' + elementDefinition.controlStyle + '"' : '' ),

@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -19,6 +19,7 @@
  */
 CKEDITOR.lang[ 'sr' ] = {
 	// ARIA description.
+	application: 'Rich Text Editor', // MISSING
 	editor: 'ХТМЛ уређивач текста',
 	editorPanel: 'ХТМЛ уређивач панел',
 
@@ -34,7 +35,6 @@ CKEDITOR.lang[ 'sr' ] = {
 		upload: 'Пошаљи',
 		uploadSubmit: 'Пошаљи на сервер',
 		image: 'Слика',
-		flash: 'Флеш елемент',
 		form: 'Формулар',
 		checkbox: 'Поље за потврду',
 		radio: 'Радио-дугме',

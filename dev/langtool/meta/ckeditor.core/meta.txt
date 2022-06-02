@@ -1,4 +1,4 @@
-# Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+# Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
 # For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 
 editor = ARIA description for the editor.
@@ -10,7 +10,6 @@ common.protocol = Label for the Protocol field of the Link dialog window.
 common.upload = Label for the Upload field of the Link dialog window.
 common.uploadSubmit = Label for the button that uploads the file to the server.
 common.image = Toolbar button tooltip for the Image feature.
-common.flash = Toolbar button tooltip for the Flash feature.
 common.form = Toolbar button tooltip for the Form feature.
 common.checkbox = Toolbar button tooltip for the Checkbox feature.
 common.radio = Toolbar button tooltip for the Radio Button feature.

@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -19,6 +19,7 @@
  */
 CKEDITOR.lang[ 'sk' ] = {
 	// ARIA description.
+	application: 'Rich Text Editor', // MISSING
 	editor: 'Editor formátovaného textu',
 	editorPanel: 'Panel editora formátovaného textu',
 
@@ -34,7 +35,6 @@ CKEDITOR.lang[ 'sk' ] = {
 		upload: 'Odoslať',
 		uploadSubmit: 'Odoslať na server',
 		image: 'Obrázok',
-		flash: 'Flash',
 		form: 'Formulár',
 		checkbox: 'Zaškrtávacie pole',
 		radio: 'Prepínač',

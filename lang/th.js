@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -19,7 +19,8 @@
  */
 CKEDITOR.lang[ 'th' ] = {
 	// ARIA description.
-	editor: 'Rich Text Editor', // MISSING
+	application: 'Rich Text Editor', // MISSING
+	editor: 'Editor', // MISSING
 	editorPanel: 'Rich Text Editor panel', // MISSING
 
 	// Common messages and labels.
@@ -34,7 +35,6 @@ CKEDITOR.lang[ 'th' ] = {
 		upload: 'อัพโหลดไฟล์',
 		uploadSubmit: 'อัพโหลดไฟล์ไปเก็บไว้ที่เครื่องแม่ข่าย (เซิร์ฟเวอร์)',
 		image: 'รูปภาพ',
-		flash: 'ไฟล์ Flash',
 		form: 'แบบฟอร์ม',
 		checkbox: 'เช็คบ๊อก',
 		radio: 'เรดิโอบัตตอน',

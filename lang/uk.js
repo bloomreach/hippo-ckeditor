@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -19,6 +19,7 @@
  */
 CKEDITOR.lang[ 'uk' ] = {
 	// ARIA description.
+	application: 'Rich Text Editor', // MISSING
 	editor: 'Текстовий редактор',
 	editorPanel: 'Панель розширеного текстового редактора',
 
@@ -34,7 +35,6 @@ CKEDITOR.lang[ 'uk' ] = {
 		upload: 'Надіслати',
 		uploadSubmit: 'Надіслати на сервер',
 		image: 'Зображення',
-		flash: 'Flash',
 		form: 'Форма',
 		checkbox: 'Галочка',
 		radio: 'Кнопка вибору',

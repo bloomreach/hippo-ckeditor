@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -19,6 +19,7 @@
  */
 CKEDITOR.lang[ 'gu' ] = {
 	// ARIA description.
+	application: 'Rich Text Editor', // MISSING
 	editor: 'રીચ ટેક્ષ્ત્ એડીટર',
 	editorPanel: 'વધુ વિકલ્પ વાળુ એડિટર',
 
@@ -34,7 +35,6 @@ CKEDITOR.lang[ 'gu' ] = {
 		upload: 'અપલોડ',
 		uploadSubmit: 'આ સર્વરને મોકલવું',
 		image: 'ચિત્ર',
-		flash: 'ફ્લૅશ',
 		form: 'ફૉર્મ/પત્રક',
 		checkbox: 'ચેક બોક્સ',
 		radio: 'રેડિઓ બટન',

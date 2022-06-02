@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -148,11 +148,8 @@
 			if ( newHeight != currentHeight && lastHeight != newHeight ) {
 				newHeight = editor.fire( 'autoGrow', { currentHeight: currentHeight, newHeight: newHeight } ).newHeight;
 
-				var boxSizingType = editor.container.getComputedStyle( 'box-sizing' ),
-					isBorderBox = boxSizingType === 'border-box',
-					width = editor.container.getSize( 'width', isBorderBox );
-
-				editor.resize( width, newHeight, true );
+				// Set width parameter as null, to update only the height of the editor. (#4891)
+				editor.resize( null, newHeight, true );
 				lastHeight = newHeight;
 			}
 

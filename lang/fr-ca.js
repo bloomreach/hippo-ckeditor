@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -19,6 +19,7 @@
  */
 CKEDITOR.lang[ 'fr-ca' ] = {
 	// ARIA description.
+	application: 'Rich Text Editor', // MISSING
 	editor: 'Éditeur de texte enrichi',
 	editorPanel: 'Rich Text Editor panel', // MISSING
 
@@ -34,7 +35,6 @@ CKEDITOR.lang[ 'fr-ca' ] = {
 		upload: 'Envoyer',
 		uploadSubmit: 'Envoyer au serveur',
 		image: 'Image',
-		flash: 'Animation Flash',
 		form: 'Formulaire',
 		checkbox: 'Case à cocher',
 		radio: 'Bouton radio',

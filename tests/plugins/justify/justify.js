@@ -12,6 +12,11 @@
 	};
 
 	var tests = {
+		init: function() {
+			CKEDITOR.addCss( '.usecomputedstatetest { text-align: right;}' +
+				'.usecomputedstatetestdir { direction: rtl; }' );
+		},
+
 		'test alignment command on selected image': function() {
 			var bot = this.editorBot;
 			bot.setHtmlWithSelection( '<p>[<img src="http://tests/404" style="float:left;"/>]</p>' );
@@ -74,18 +79,13 @@
 		},
 
 		'test alignment commands with justifyClasses': function() {
-			// (#3364)
-			if ( CKEDITOR.env.gecko ) {
-				assert.ignore();
-			}
-
 			return bender.editorBot.createAsync( {
 					name: 'editor_classes',
 					config: {
 						justifyClasses: [ 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify' ],
 						plugins: 'justify,toolbar',
 						extraAllowedContent: 'img[src]',
-						contentsCss: '_assets/styles.css'
+						contentsCss: '%TEST_DIR%/_assets/styles.css'
 					}
 				} )
 				.then( function( bot ) {
@@ -119,11 +119,6 @@
 		},
 
 		'test alignment commands with justifyClasses - one disallowed': function() {
-			// (#3364)
-			if ( CKEDITOR.env.gecko ) {
-				assert.ignore();
-			}
-
 			return bender.editorBot.createAsync( {
 					name: 'editor_classes2',
 					config: {
@@ -131,7 +126,7 @@
 						plugins: 'justify,toolbar',
 						// Note: alignRight is not allowed.
 						allowedContent: 'p(alignLeft,alignCenter,alignJustify); img[src]',
-						contentsCss: '_assets/styles.css'
+						contentsCss: '%TEST_DIR%/_assets/styles.css'
 					}
 				} )
 				.then( function( bot ) {
@@ -184,18 +179,13 @@
 		},
 
 		'test alignment commands in div mode and with justifyClasses': function() {
-			// (#3364)
-			if ( CKEDITOR.env.gecko ) {
-				assert.ignore();
-			}
-
 			return bender.editorBot.createAsync( {
 					name: 'editor_enter_div',
 					config: {
 						plugins: 'justify,toolbar',
 						enterMode: CKEDITOR.ENTER_DIV,
 						justifyClasses: [ 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify' ],
-						contentsCss: '_assets/styles.css'
+						contentsCss: '%TEST_DIR%/_assets/styles.css'
 					}
 				} )
 				.then( function( bot ) {
@@ -254,7 +244,7 @@
 						plugins: 'justify,toolbar,wysiwygarea',
 						allowedContent: 'p ul(align*);li;',
 						justifyClasses: [ 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify' ],
-						contentsCss: '_assets/styles.css'
+						contentsCss: '%TEST_DIR%/_assets/styles.css'
 					}
 				} )
 				.then( function( bot ) {
@@ -389,17 +379,12 @@
 
 		// (#455)
 		'test alignment on multi-element non-collapsed selection (class)': function() {
-			// (#3364)
-			if ( CKEDITOR.env.gecko ) {
-				assert.ignore();
-			}
-
 			return bender.editorBot.createAsync( {
 					name: 'editor_p_2_class',
 					config: {
 						plugins: 'justify,toolbar,wysiwygarea',
 						justifyClasses: [ 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify' ],
-						contentsCss: '_assets/styles.css',
+						contentsCss: '%TEST_DIR%/_assets/styles.css',
 						allowedContent: 'p ul(align*);li;'
 					}
 				} )
@@ -447,11 +432,6 @@
 
 		// (#455)
 		'test alignment on multi-element with disallowContent (class)': function() {
-			// (#3364)
-			if ( CKEDITOR.env.gecko ) {
-				assert.ignore();
-			}
-
 			return bender.editorBot.createAsync( {
 					name: 'editor_p_3_class',
 					config: {
@@ -465,7 +445,7 @@
 						},
 						disallowedContent: 'h1(align*){text-align}',
 						justifyClasses: [ 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify' ],
-						contentsCss: '_assets/styles.css'
+						contentsCss: '%TEST_DIR%/_assets/styles.css'
 					}
 				} )
 				.then( function( bot ) {
@@ -584,6 +564,112 @@
 				} )
 				.then( function( bot ) {
 					assert.isInnerHtmlMatching( '<div style="text-align:center"><span class="marker">Foo bar baz</span></div>', bot.getData(), { fixStyles: true } );
+				} );
+		},
+
+		// (#4989)
+		'test justify buttons states in the editor with config.useComputedState set to default value': function() {
+			return bender.editorBot.createAsync( {
+					name: 'editor_useComputedState_default',
+					config: {
+						extraAllowedContent: 'p(usecomputedstatetest)',
+						plugins: 'justify,toolbar'
+					}
+				} )
+				.then( function( bot ) {
+					bot.setHtmlWithSelection( '<p class="usecomputedstatetest">[Foo bar baz]</p>' );
+
+					return assertCommandState( CKEDITOR.TRISTATE_OFF, CKEDITOR.TRISTATE_ON, CKEDITOR.TRISTATE_OFF,
+						CKEDITOR.TRISTATE_OFF, bot );
+				} );
+		},
+
+		// (#4989)
+		'test justify buttons states in the editor with config.useComputedState set to true': function() {
+			return bender.editorBot.createAsync( {
+					name: 'editor_useComputedState_true',
+					config: {
+						extraAllowedContent: 'p(usecomputedstatetest)',
+						plugins: 'justify,toolbar',
+						useComputedState: true
+					}
+				} )
+				.then( function( bot ) {
+					bot.setHtmlWithSelection( '<p class="usecomputedstatetest">[Foo bar baz]</p>' );
+
+					return assertCommandState( CKEDITOR.TRISTATE_OFF, CKEDITOR.TRISTATE_ON, CKEDITOR.TRISTATE_OFF,
+						CKEDITOR.TRISTATE_OFF, bot );
+				} );
+		},
+
+		// (#4989)
+		'test justify buttons states in the editor with config.useComputedState set to false': function() {
+			return bender.editorBot.createAsync( {
+					name: 'editor_useComputedState_false',
+					config: {
+						extraAllowedContent: 'p(usecomputedstatetest)',
+						plugins: 'justify,toolbar',
+						useComputedState: false
+					}
+				} )
+				.then( function( bot ) {
+					bot.setHtmlWithSelection( '<p class="usecomputedstatetest">[Foo bar baz]</p>' );
+
+					return assertCommandState( CKEDITOR.TRISTATE_OFF, CKEDITOR.TRISTATE_OFF, CKEDITOR.TRISTATE_OFF,
+						CKEDITOR.TRISTATE_OFF, bot );
+				} );
+		},
+
+		// (#4989)
+		'test justify buttons states in the editor with config.useComputedState set to default value (direction style)': function() {
+			return bender.editorBot.createAsync( {
+					name: 'editor_useComputedStateDir_default',
+					config: {
+						extraAllowedContent: 'p(usecomputedstatetestdir)',
+						plugins: 'justify,toolbar'
+					}
+				} )
+				.then( function( bot ) {
+					bot.setHtmlWithSelection( '<p class="usecomputedstatetestdir">[Foo bar baz]</p>' );
+
+					return assertCommandState( CKEDITOR.TRISTATE_OFF, CKEDITOR.TRISTATE_ON, CKEDITOR.TRISTATE_OFF,
+						CKEDITOR.TRISTATE_OFF, bot );
+				} );
+		},
+
+		// (#4989)
+		'test justify buttons states in the editor with config.useComputedState set to true (direction style)': function() {
+			return bender.editorBot.createAsync( {
+					name: 'editor_useComputedStateDir_true',
+					config: {
+						extraAllowedContent: 'p(usecomputedstatetestdir)',
+						plugins: 'justify,toolbar',
+						useComputedState: true
+					}
+				} )
+				.then( function( bot ) {
+					bot.setHtmlWithSelection( '<p class="usecomputedstatetestdir">[Foo bar baz]</p>' );
+
+					return assertCommandState( CKEDITOR.TRISTATE_OFF, CKEDITOR.TRISTATE_ON, CKEDITOR.TRISTATE_OFF,
+						CKEDITOR.TRISTATE_OFF, bot );
+				} );
+		},
+
+		// (#4989)
+		'test justify buttons states in the editor with config.useComputedState set to false (direction style)': function() {
+			return bender.editorBot.createAsync( {
+					name: 'editor_useComputedStateDir_false',
+					config: {
+						extraAllowedContent: 'p(usecomputedstatetestdir)',
+						plugins: 'justify,toolbar',
+						useComputedState: false
+					}
+				} )
+				.then( function( bot ) {
+					bot.setHtmlWithSelection( '<p class="usecomputedstatetestdir">[Foo bar baz]</p>' );
+
+					return assertCommandState( CKEDITOR.TRISTATE_OFF, CKEDITOR.TRISTATE_OFF, CKEDITOR.TRISTATE_OFF,
+						CKEDITOR.TRISTATE_OFF, bot );
 				} );
 		}
 	};

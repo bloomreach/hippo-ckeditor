@@ -1,6 +1,6 @@
 {
   "name": "ckeditor4-dev",
-  "version": "4.16.2",
+  "version": "4.19.0",
   "private": true,
   "description": "The development version of CKEditor - JavaScript WYSIWYG web text editor.",
   "dependencies": {
@@ -28,7 +28,7 @@
 	"npm": ">=6"
   },
   "author": "CKSource (https://cksource.com/)",
-  "license": "(GPL-2.0-or-later OR LGPL-2.1 OR MPL-1.1)",
+  "license": "(GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1-or-later)",
   "bugs": "https://github.com/ckeditor/ckeditor4/issues",
   "homepage": "https://ckeditor.com",
   "repository": {

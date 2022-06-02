@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -248,17 +248,6 @@
 
 					this.toggleState();
 
-					// Toggle button label.
-					var button = this.uiItems[ 0 ];
-					// Only try to change the button if it exists (https://dev.ckeditor.com/ticket/6166)
-					if ( button ) {
-						var label = ( this.state == CKEDITOR.TRISTATE_OFF ) ? lang.maximize.maximize : lang.maximize.minimize;
-						var buttonNode = CKEDITOR.document.getById( button._.id );
-						buttonNode.getChild( 1 ).setHtml( label );
-						buttonNode.setAttribute( 'title', label );
-						buttonNode.setAttribute( 'href', 'javascript:void("' + label + '");' ); // jshint ignore:line
-					}
-
 					// Restore selection and scroll position in editing area.
 					if ( editor.mode == 'wysiwyg' ) {
 						if ( savedSelection ) {
@@ -289,6 +278,7 @@
 			} );
 
 			editor.ui.addButton && editor.ui.addButton( 'Maximize', {
+				isToggle: true,
 				label: lang.maximize.maximize,
 				command: 'maximize',
 				toolbar: 'tools,10'
@@ -299,8 +289,39 @@
 				var command = editor.getCommand( 'maximize' );
 				command.setState( command.state == CKEDITOR.TRISTATE_DISABLED ? CKEDITOR.TRISTATE_DISABLED : savedState );
 			}, null, null, 100 );
+
+			// Add support for History API (#4374).
+			if ( editor.config.maximize_historyIntegration ) {
+				var historyEvent = editor.config.maximize_historyIntegration === CKEDITOR.HISTORY_NATIVE ?
+					'popstate' : 'hashchange';
+
+				mainWindow.on( historyEvent, function() {
+					var command = editor.getCommand( 'maximize' );
+
+					if ( command.state === CKEDITOR.TRISTATE_ON ) {
+						command.exec();
+					}
+				} );
+			}
 		}
 	} );
+
+	/**
+	 * Informs plugin how it should integrate with browser's "Go back" and "Go forward" buttons.
+	 *
+	 * If it's set to {@link CKEDITOR#HISTORY_NATIVE}, the plugin will use native History API and
+	 * [`popstate`](https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event) event.
+	 *
+	 * If it's set to {@link CKEDITOR#HISTORY_HASH}, the plugin will use
+	 * [`hashchange`](https://developer.mozilla.org/en-US/docs/Web/API/Window/hashchange_event) event.
+	 *
+	 * If it's set to {@link CKEDITOR#HISTORY_OFF}, the plugin will not integrate
+	 * with browser's "Go back" and "Go forward" buttons.
+	 *
+	 * @cfg {Number} [maximize_historyIntegration=CKEDITOR.HISTORY_NATIVE]
+	 * @member CKEDITOR.config
+	 */
+	CKEDITOR.config.maximize_historyIntegration = CKEDITOR.HISTORY_NATIVE;
 } )();
 
 /**
