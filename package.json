@@ -6,7 +6,7 @@
   "dependencies": {
     "ckeditor-codemirror-plugin": "github:w8tcha/CKEditor-CodeMirror-Plugin#v1.17.10",
     "ckeditor-textselection-plugin": "github:w8tcha/CKEditor-TextSelection-Plugin#42beb1fd401d292487bbde319086d3b662340589",
-    "ckeditor-wordcount-plugin": "github:w8tcha/CKEditor-WordCount-Plugin#v1.17.8",
+    "ckeditor-wordcount-plugin": "1.17.10",
     "ckeditor-youtube-plugin": "2.1.19"
   },
   "scripts": {
