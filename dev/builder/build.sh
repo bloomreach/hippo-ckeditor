@@ -69,13 +69,14 @@ cd ../..
 printf "\n"
 printf "Starting CKBuilder...\n"
 
-jdk_version=$( echo `java -version 2>&1 | grep 'version' 2>&1 | awk -F\" '{ split($2,a,"."); print a[1]}'` | bc -l);
-regex='^[0-9]+$';
+# Disabled the built-in JDK check for now (missing `bc` command on Jenkins)
+# jdk_version=$( echo `java -version 2>&1 | grep 'version' 2>&1 | awk -F\" '{ split($2,a,"."); print a[1]}'` | bc -l);
+# regex='^[0-9]+$';
 # Builder is crashing when JDK version is newer than 15.
-if ! [[ $jdk_version =~ $regex ]] || [ $jdk_version -gt 15 ]; then
-	printf "${MSG_INCORRECT_JDK_VERSION}\n";
-	printf "${UNDERLINE}${YELLOW}Actual version of JDK: ${jdk_version}${RESET_STYLE}\n";
-fi
+# if ! [[ $jdk_version =~ $regex ]] || [ $jdk_version -gt 15 ]; then
+#	printf "${MSG_INCORRECT_JDK_VERSION}\n";
+#	printf "${UNDERLINE}${YELLOW}Actual version of JDK: ${jdk_version}${RESET_STYLE}\n";
+#fi
 
 printf "Copy external plugins from node_modules..."
 cp -r ../../node_modules/ckeditor-codemirror-plugin/codemirror ../../plugins/
