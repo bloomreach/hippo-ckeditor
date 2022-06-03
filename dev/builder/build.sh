@@ -108,5 +108,8 @@ fi
 printf "Copy icons of codemirror plugin..."
 cp -r ../../plugins/codemirror/icons release/ckeditor/plugins/codemirror
 
+printf "Use hdpi icon to fix blurry youtube toolbar icon..."
+cp -f release/ckeditor/plugins/youtube/images/icon-hdpi.png release/ckeditor/plugins/youtube/images/icon.png
+
 printf "\n"
 printf "Release created in the \"release\" directory.\n"
