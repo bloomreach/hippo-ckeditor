@@ -4,10 +4,10 @@
   "private": true,
   "description": "The development version of CKEditor - JavaScript WYSIWYG web text editor.",
   "dependencies": {
-    "ckeditor-codemirror-plugin": "github:w8tcha/CKEditor-CodeMirror-Plugin#v1.17.10",
+	"@bloomreach/hippo-ckeditor-youtube-plugin": "2.1.19",
+    "ckeditor-codemirror-plugin": "github:w8tcha/ckeditor-codemirror-plugin#v1.17.10",
     "ckeditor-textselection-plugin": "github:w8tcha/CKEditor-TextSelection-Plugin#42beb1fd401d292487bbde319086d3b662340589",
-    "ckeditor-wordcount-plugin": "1.17.10",
-    "ckeditor-youtube-plugin": "2.1.19"
+    "ckeditor-wordcount-plugin": "1.17.10"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

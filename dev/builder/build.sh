@@ -78,11 +78,11 @@ printf "Starting CKBuilder...\n"
 #	printf "${UNDERLINE}${YELLOW}Actual version of JDK: ${jdk_version}${RESET_STYLE}\n";
 #fi
 
-printf "Copy external plugins from node_modules..."
+printf "Copy external plugins from node_modules...\n"
 cp -r ../../node_modules/ckeditor-codemirror-plugin/codemirror ../../plugins/
 cp -r ../../node_modules/ckeditor-textselection-plugin/textselection ../../plugins/
 cp -r ../../node_modules/ckeditor-wordcount-plugin/wordcount ../../plugins/
-cp -r ../../node_modules/ckeditor-youtube-plugin/youtube ../../plugins/
+cp -r ../../node_modules/@bloomreach/hippo-ckeditor-youtube-plugin/youtube ../../plugins/
 
 JAVA_ARGS=${ARGS// -t / } # Remove -t from args.
 VERSION=$(grep '"version":' ./../../package.json | sed $'s/[\t\",: ]//g; s/version//g' | tr -d '[[:space:]]')
@@ -105,10 +105,10 @@ if [[ "$ARGS" == *\ \-t\ * ]]; then
 	(cd release/ckeditor &&	npm install && bender init)
 fi
 
-printf "Copy icons of codemirror plugin..."
+printf "Copy icons of codemirror plugin...\n"
 cp -r ../../plugins/codemirror/icons release/ckeditor/plugins/codemirror
 
-printf "Use hdpi icon to fix blurry youtube toolbar icon..."
+printf "Use hdpi icon to fix blurry youtube toolbar icon...\n"
 cp -f release/ckeditor/plugins/youtube/images/icon-hdpi.png release/ckeditor/plugins/youtube/images/icon.png
 
 printf "\n"
