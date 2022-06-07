@@ -16,14 +16,14 @@
   <name>Hippo CKEditor</name>
   <description>CKEditor for Hippo CMS</description>
   <artifactId>hippo-ckeditor</artifactId>
-  <version>4.19.0-h2-SNAPSHOT</version>
+  <version>4.19.0-h2</version>
   <packaging>pom</packaging>
 
   <scm>
     <connection>scm:git:https://code.bloomreach.com/engineering/xm/hippo-ckeditor.git</connection>
     <developerConnection>scm:git:git@code-ssh.bloomreach.com:engineering/xm/hippo-ckeditor.git</developerConnection>
     <url>https://code.bloomreach.com/engineering/xm/hippo-ckeditor</url>
-	  <tag>HEAD</tag>
+	  <tag>hippo-ckeditor-4.19.0-h2</tag>
   </scm>
 	<repositories>
 		<repository>
