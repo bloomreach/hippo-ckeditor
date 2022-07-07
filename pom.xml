@@ -25,7 +25,23 @@
     <url>https://code.bloomreach.com/engineering/xm/hippo-ckeditor</url>
 	  <tag>HEAD</tag>
   </scm>
-	<repositories>
+
+  <distributionManagement>
+    <repository>
+      <name>Hippo Maven 2 Public Releases</name>
+      <id>hippo-maven2-releases</id>
+      <url>https://maven.onehippo.com/content/repositories/releases/</url>
+      <uniqueVersion>false</uniqueVersion>
+    </repository>
+    <snapshotRepository>
+      <name>Hippo Maven 2 Public Snapshots</name>
+      <id>hippo-maven2-snapshots</id>
+      <url>https://maven.onehippo.com/content/repositories/snapshots/</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <repositories>
 		<repository>
 			<id>hippo</id>
 			<name>Hippo Maven 2</name>
@@ -150,6 +166,28 @@
 	</build>
 
 	<profiles>
+    <profile>
+      <id>deploy-to-enterprise-repository</id>
+      <activation>
+        <property>
+          <name>deployToEnterprise</name>
+        </property>
+      </activation>
+      <distributionManagement>
+        <repository>
+          <name>Hippo Maven 2 Enterprise Repository</name>
+          <id>hippo-maven2-enterprise</id>
+          <url>https://maven.onehippo.com/content/repositories/enterprise-releases/</url>
+          <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+          <name>Hippo Maven 2 Enterprise Snapshots</name>
+          <id>hippo-maven2-enterprise-snapshots</id>
+          <url>https://maven.onehippo.com/content/repositories/enterprise-snapshots/</url>
+          <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+      </distributionManagement>
+    </profile>
 		<profile>
 			<id>pedantic</id>
 			<build>
