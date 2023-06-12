@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -138,7 +138,9 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 	// "src" field is altered. Along with dimensions, also the
 	// dimensions lock is adjusted.
 	function onChangeSrc() {
-		var value = this.getValue();
+		var value = this.getValue(),
+			lockRatioValue = editor.config.image2_defaultLockRatio,
+			isLockRatioSet = lockRatioValue !== undefined;
 
 		toggleDimensions( false );
 
@@ -151,7 +153,7 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 
 				// There was problem loading the image. Unlock ratio.
 				if ( !image )
-					return toggleLockRatio( false );
+					return toggleLockRatio( ( isLockRatioSet ? lockRatioValue : false ) );
 
 				// Fill width field with the width of the new image.
 				widthField.setValue( editor.config.image2_prefillDimensions === false ? 0 : width );
@@ -166,7 +168,7 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 				preLoadedHeight = domHeight = height;
 
 				// Check for new lock value if image exist.
-				toggleLockRatio( helpers.checkHasNaturalRatio( image ) );
+				toggleLockRatio( ( isLockRatioSet ? lockRatioValue : helpers.checkHasNaturalRatio( image ) ) );
 			} );
 
 			srcChanged = true;

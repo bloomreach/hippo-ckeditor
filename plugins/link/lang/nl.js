@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
 For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 CKEDITOR.plugins.setLang( 'link', 'nl', {
@@ -8,15 +8,16 @@ CKEDITOR.plugins.setLang( 'link', 'nl', {
 	advisoryContentType: 'Aanbevolen content-type',
 	advisoryTitle: 'Adviserende titel',
 	anchor: {
-		toolbar: 'Anker',
-		menu: 'Eigenschappen anker',
-		title: 'Eigenschappen anker',
-		name: 'Naam anker',
-		errorName: 'Geef de naam van het anker op',
-		remove: 'Verwijder anker'
+		toolbar: 'Interne link',
+		menu: 'Eigenschappen interne link',
+		title: 'Eigenschappen interne link',
+		name: 'Naam interne link',
+		errorName: 'Geef de naam van de interne link op',
+		errorWhitespace: 'Anchor name cannot contain space characters', // MISSING
+		remove: 'Interne link verwijderen'
 	},
-	anchorId: 'ID van element',
-	anchorName: 'Naam anker',
+	anchorId: 'Op kenmerk interne link',
+	anchorName: 'Op naam interne link',
 	charset: 'Karakterset van gelinkte bron',
 	cssClasses: 'Stylesheet-klassen',
 	download: 'Download forceren',
@@ -32,7 +33,7 @@ CKEDITOR.plugins.setLang( 'link', 'nl', {
 	langDirRTL: 'Rechts naar links (RTL)',
 	menu: 'Link wijzigen',
 	name: 'Naam',
-	noAnchors: '(Geen ankers in tekst gevonden)',
+	noAnchors: '(Geen interne links in document gevonden)',
 	noEmail: 'Geef een e-mailadres',
 	noUrl: 'Geef de link van de URL',
 	noTel: 'Geef een telefoonnummer',
@@ -50,7 +51,7 @@ CKEDITOR.plugins.setLang( 'link', 'nl', {
 	popupToolbar: 'Werkbalk',
 	popupTop: 'Positie boven',
 	rel: 'Relatie',
-	selectAnchor: 'Kies een anker',
+	selectAnchor: 'Kies een interne link',
 	styles: 'Stijl',
 	tabIndex: 'Tabvolgorde',
 	target: 'Doelvenster',
@@ -58,12 +59,12 @@ CKEDITOR.plugins.setLang( 'link', 'nl', {
 	targetFrameName: 'Naam doelframe',
 	targetPopup: '<popupvenster>',
 	targetPopupName: 'Naam popupvenster',
-	title: 'Externe link',
+	title: 'Link',
+	toAnchor: 'Interne link in pagina',
 	toEmail: 'E-mail',
-	toAnchor: 'Link naar anker in tekst',
 	toUrl: 'URL',
-	toPhone: 'Telefoonnummer',
-	toolbar: 'Externe link',
+	toPhone: 'Telefoon',
+	toolbar: 'Link invoegen/wijzigen',
 	type: 'Linktype',
 	unlink: 'Link verwijderen',
 	upload: 'Upload'

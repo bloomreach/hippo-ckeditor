@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -19,8 +19,8 @@
  */
 CKEDITOR.lang[ 'zh-cn' ] = {
 	// ARIA description.
-	application: 'Rich Text Editor', // MISSING
-	editor: '所见即所得编辑器',
+	application: '富文本编辑器',
+	editor: '编辑器',
 	editorPanel: '所见即所得编辑器面板',
 
 	// Common messages and labels.
