@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
-# For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+# Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+# CKEditor 4 LTS ("Long Term Support") is available under the terms of the Extended Support Model.
 
 # Build CKEditor using the default settings (and build.js).
 
@@ -9,7 +9,7 @@ set -e
 printf "CKBuilder - Builds a release version of ckeditor4.\n"
 printf "\n"
 
-CKBUILDER_VERSION="2.4.3"
+CKBUILDER_VERSION="2.4.4"
 CKBUILDER_URL="https://download.cksource.com/CKBuilder/$CKBUILDER_VERSION/ckbuilder.jar"
 
 RED='\033[01;31m'
@@ -92,6 +92,32 @@ REVISION=$(git rev-parse --verify --short HEAD)
 
 java -jar ckbuilder/$CKBUILDER_VERSION/ckbuilder.jar --build ../../ release $JAVA_ARGS --version="$VERSION" --revision="$REVISION" --overwrite --skip-omitted-in-build-config --no-tar --no-zip --no-ie-checks
 
+#--------------------------------------- new build script ---------------------------------------
+# Add suffix for LTS editor version.
+if [[ "$@" == *\-\-lts* ]]; then
+	VERSION="${VERSION}-lts"
+fi
+
+# If the current revision is not tagged with any CKE version, it means it's a "dirty" build. We
+# mark such builds with a " DEV" suffix. true is needed because of "set -e".
+TAG=$(git tag --points-at HEAD) || true
+
+# This fancy construction check str length of $TAG variable.
+if [ ${#TAG} -le 0 ];
+then
+	VERSION="$VERSION DEV"
+fi
+
+{
+	java -jar ckbuilder/$CKBUILDER_VERSION/ckbuilder.jar --build ../../ release $JAVA_ARGS --version="$VERSION" --revision="$REVISION" --overwrite
+} || {
+	if ! [[ $jdk_version =~ $regex ]] || [ $jdk_version -gt 15 ]; then
+		printf "\n${RED}The build has been stopped. Please verify the eventual error messages above.${RESET_STYLE}\n"
+		exit 1
+	fi
+}
+#--------------------------------------- new build script ---------------------------------------
+
 # Copy and build tests.
 if [[ "$ARGS" == *\ \-t\ * ]]; then
 	printf "\n"
@@ -100,6 +126,7 @@ if [[ "$ARGS" == *\ \-t\ * ]]; then
 	cp -r ../../tests release/ckeditor/tests
 	cp -r ../../package.json release/ckeditor/package.json
 	cp -r ../../bender.js release/ckeditor/bender.js
+	cp -r ../../bender.js release/ckeditor/bender-runner.config.json
 
 	printf "\n"
 	printf "Installing tests...\n"

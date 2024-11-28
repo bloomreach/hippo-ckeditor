@@ -1,6 +1,6 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * CKEditor 4 LTS ("Long Term Support") is available under the terms of the Extended Support Model.
  */
 
 ( function( bender ) {
@@ -1691,9 +1691,9 @@
 		 */
 		prepareInnerHtmlPattern: function( pattern ) {
 			pattern = bender.tools.escapeRegExp( pattern )
-				.replace( /@@/g, CKEDITOR.env.needsBrFiller ? '(<br />)?' : '(&nbsp;)?' )
-				.replace( /@!/g, CKEDITOR.env.needsBrFiller ? '<br />' : '' )
-				.replace( /@/g, CKEDITOR.env.needsBrFiller ? '(<br />)?' : '' );
+				.replace( /@@/g, CKEDITOR.env.needsBrFiller ? '(<br (?:type="_moz" )?/>)?' : '(&nbsp;)?' )
+				.replace( /@!/g, CKEDITOR.env.needsBrFiller ? '<br (?:type="_moz" )?/>' : '' )
+				.replace( /@/g, CKEDITOR.env.needsBrFiller ? '(<br (?:type="_moz" )?/>)?' : '' );
 
 			return new RegExp( '^' + pattern + '$' );
 		}

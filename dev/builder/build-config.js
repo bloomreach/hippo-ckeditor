@@ -1,6 +1,6 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * CKEditor 4 LTS ("Long Term Support") is available under the terms of the Extended Support Model.
  */
 
 /* exported CKBUILDER_CONFIG */
@@ -10,10 +10,11 @@ var CKBUILDER_CONFIG = {
 	ignore: [
 		'bender.js',
 		'bender.ci.js',
+		'bender-runner.config.json',
 		'.bender',
 		'bender-err.log',
 		'bender-out.log',
-		'.travis.yml',
+		'.circleci',
 		'dev',
 		'docs',
 		'.DS_Store',

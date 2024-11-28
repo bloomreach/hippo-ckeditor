@@ -1,6 +1,6 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * CKEditor 4 LTS ("Long Term Support") is available under the terms of the Extended Support Model.
  */
 
 /**
@@ -31,10 +31,14 @@ if ( !CKEDITOR.loader ) {
 			'ckeditor': [
 				'ckeditor_basic', 'log', 'dom', 'dtd', 'dom/document', 'dom/element', 'dom/iterator', 'editor', 'event',
 				'htmldataprocessor', 'htmlparser', 'htmlparser/element', 'htmlparser/fragment', 'htmlparser/filter',
-				'htmlparser/basicwriter', 'template', 'tools'
+				'htmlparser/basicwriter', 'template', 'tools',
+
+				'ckeditor_version-check', 'ckeditor_license-check'
 			],
 			'ckeditor_base': [],
 			'ckeditor_basic': [ 'editor_basic', 'env', 'event' ],
+			'ckeditor_license-check': [ 'ckeditor_basic', 'config', 'log' ],
+			'ckeditor_version-check': [ 'ckeditor_basic', 'config', 'tools' ],
 			'command': [],
 			'config': [ 'ckeditor_base' ],
 			'dom': [],

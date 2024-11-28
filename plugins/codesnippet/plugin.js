@@ -1,6 +1,6 @@
 ﻿/**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * CKEditor 4 LTS ("Long Term Support") is available under the terms of the Extended Support Model.
  */
 
 /**
@@ -19,7 +19,7 @@
 		hidpi: true, // %REMOVE_LINE_CORE%
 
 		isSupportedEnvironment: function() {
-			return !CKEDITOR.env.ie || CKEDITOR.env.version > 8;
+			return !CKEDITOR.env.ie;
 		},
 
 		beforeInit: function( editor ) {
