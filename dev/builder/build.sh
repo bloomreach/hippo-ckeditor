@@ -92,31 +92,31 @@ REVISION=$(git rev-parse --verify --short HEAD)
 
 #--------------------------------------- new build script ---------------------------------------
 # Add suffix for LTS editor version.
-# if [[ "$@" == *\-\-lts* ]]; then
-# 	VERSION="${VERSION}-lts"
-# fi
+if [[ "$@" == *\-\-lts* ]]; then
+	VERSION="${VERSION}-lts"
+fi
 
-# # If the current revision is not tagged with any CKE version, it means it's a "dirty" build. We
-# # mark such builds with a " DEV" suffix. true is needed because of "set -e".
-# TAG=$(git tag --points-at HEAD) || true
+# If the current revision is not tagged with any CKE version, it means it's a "dirty" build. We
+# mark such builds with a " DEV" suffix. true is needed because of "set -e".
+TAG=$(git tag --points-at HEAD) || true
 
-# # This fancy construction check str length of $TAG variable.
-# if [ ${#TAG} -le 0 ];
-# then
-# 	VERSION="$VERSION DEV"
-# fi
+# This fancy construction check str length of $TAG variable.
+if [ ${#TAG} -le 0 ];
+then
+	VERSION="$VERSION DEV"
+fi
 
-# {
-# 	java -jar ckbuilder/$CKBUILDER_VERSION/ckbuilder.jar --build ../../ release $JAVA_ARGS --version="$VERSION" --revision="$REVISION" --overwrite
-# } || {
-# 	if ! [[ $jdk_version =~ $regex ]] || [ $jdk_version -gt 15 ]; then
-# 		printf "\n${RED}The build has been stopped. Please verify the eventual error messages above.${RESET_STYLE}\n"
-# 		exit 1
-# 	fi
-# }
+{
+	java -jar ckbuilder/$CKBUILDER_VERSION/ckbuilder.jar --build ../../ release $JAVA_ARGS --version="$VERSION" --revision="$REVISION" --overwrite
+} || {
+	if ! [[ $jdk_version =~ $regex ]] || [ $jdk_version -gt 15 ]; then
+		printf "\n${RED}The build has been stopped. Please verify the eventual error messages above.${RESET_STYLE}\n"
+		exit 1
+	fi
+}
 #--------------------------------------- new build script ---------------------------------------
 
-java -jar ckbuilder/$CKBUILDER_VERSION/ckbuilder.jar --build ../../ release $JAVA_ARGS --version="$VERSION" --revision="$REVISION" --overwrite --skip-omitted-in-build-config --no-tar --no-zip --no-ie-checks
+# java -jar ckbuilder/$CKBUILDER_VERSION/ckbuilder.jar --build ../../ release $JAVA_ARGS --version="$VERSION" --revision="$REVISION" --overwrite --skip-omitted-in-build-config --no-tar --no-zip --no-ie-checks
 
 # Copy and build tests.
 if [[ "$ARGS" == *\ \-t\ * ]]; then
