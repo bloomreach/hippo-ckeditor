@@ -16,7 +16,7 @@
   <name>Hippo CKEditor</name>
   <description>CKEditor for Hippo CMS</description>
   <artifactId>hippo-ckeditor</artifactId>
-  <version>4.21.0-h1-SNAPSHOT</version>
+  <version>4.25.0-lts-h1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <scm>
@@ -99,8 +99,8 @@
 							<goal>install-node-and-npm</goal>
 						</goals>
 						<configuration>
-							<nodeVersion>${nodejs.version}</nodeVersion>
-							<npmVersion>${npm.version}</npmVersion>
+							<nodeVersion>v18.20.4</nodeVersion>
+							<npmVersion>v10.7.0</npmVersion>
 						</configuration>
 					</execution>
 					<execution>
