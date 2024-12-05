@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2014-2022 Bloomreach (https://www.bloomreach.com)
-  For licensing, see LICENSE.md or http://ckeditor.com/license
+  Copyright 2014-2024 Bloomreach
+
+  For licensing, see LICENSE.md or https://ckeditor.com/license
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -10,12 +11,12 @@
     <parent>
         <groupId>org.onehippo.cms7</groupId>
         <artifactId>hippo-cms7-project</artifactId>
-        <version>15.0.1</version>
+        <version>16.0.0</version>
         <relativePath/>
     </parent>
 
     <name>Hippo CKEditor</name>
-    <description>CKEditor for Hippo CMS</description>
+    <description>CKEditor for Bloomreach Content, f.k.a. Hippo CMS</description>
     <artifactId>hippo-ckeditor</artifactId>
     <version>4.25.0-lts-h1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -26,9 +27,10 @@
         <url>https://code.bloomreach.com/engineering/xm/hippo-ckeditor</url>
         <tag>HEAD</tag>
     </scm>
+
     <distributionManagement>
         <repository>
-            <name>Hippo Maven 2 Public Releases</name>
+            <name>Bloomreach Maven 2 Public Releases</name>
             <id>bloomreach-maven2-enterprise</id>
             <url>https://maven.bloomreach.com/repository/enterprise-releases/</url>
             <uniqueVersion>false</uniqueVersion>
@@ -43,8 +45,8 @@
 
     <repositories>
         <repository>
-            <id>hippo</id>
-            <name>Hippo Maven 2</name>
+            <id>bloomreach</id>
+            <name>Bloomreach Maven 2</name>
             <url>https://maven.bloomreach.com/repository/maven2</url>
             <snapshots>
                 <enabled>false</enabled>
@@ -175,15 +177,15 @@
             </activation>
             <distributionManagement>
                 <repository>
-                    <name>Hippo Maven 2 Enterprise Repository</name>
-                    <id>hippo-maven2-enterprise</id>
-                    <url>https://maven.onehippo.com/content/repositories/enterprise-releases/</url>
+                    <name>Bloomreach Maven 2 Enterprise Repository</name>
+                    <id>bloomreach-maven2-enterprise</id>
+                    <url>https://maven.bloomreach.com/repositories/enterprise-releases/</url>
                     <uniqueVersion>false</uniqueVersion>
                 </repository>
                 <snapshotRepository>
-                    <name>Hippo Maven 2 Enterprise Snapshots</name>
-                    <id>hippo-maven2-enterprise-snapshots</id>
-                    <url>https://maven.onehippo.com/content/repositories/enterprise-snapshots/</url>
+                    <name>Bloomreach Maven 2 Enterprise Snapshots</name>
+                    <id>bloomreach-maven2-enterprise-snapshots</id>
+                    <url>https://maven.bloomreach.com/repositories/enterprise-snapshots/</url>
                     <uniqueVersion>false</uniqueVersion>
                 </snapshotRepository>
             </distributionManagement>
