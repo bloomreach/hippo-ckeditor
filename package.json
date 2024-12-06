@@ -1,6 +1,6 @@
 {
 	"name": "ckeditor4-dev",
-	"version": "4.25.0",
+	"version": "4.25.0-lts-h1",
 	"description": "The development version of CKEditor - JavaScript WYSIWYG web text editor.",
 	"dependencies": {
 		"@bloomreach/hippo-ckeditor-youtube-plugin": "2.1.19",
