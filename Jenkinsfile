@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
-cmsPipeline(deployBranches: ["hippo/4.5.x","hippo/4.9.x","hippo/4.11.x", "hippo/4.12.x", "hippo/4.13.x", "hippo/4.14.x", "hippo/4.16.x", "hippo/4.19.x", "hippo/4.21.x", "hippo/4.25.x-lts"])
+cmsPipeline(deployBranches: ["hippo/4.5.x","hippo/4.9.x","hippo/4.11.x", "hippo/4.12.x", "hippo/4.13.x", "hippo/4.14.x", "hippo/4.16.x", "hippo/4.19.x", "hippo/4.21.x", "hippo/4.25.x-lts"],
+			mavenProfiles: "coverage")

@@ -8,7 +8,7 @@
 ( function() {
 	var apiUrl = 'https://cke4.ckeditor.com/ckeditor4-secure-version/versions.json',
 		upgradeLink = 'https://ckeditor.com/ckeditor-4-support/',
-		// the version regex is customized updated to match the -hX version format (e.g. -h1)
+		// the version regex is customized to match the -hX version format (e.g. -h1)
 		versionRegex = /^4\.(\d+)\.(\d+)(-lts-h\d+)?(?: \(?.+?\)?)?$/,
 		isDrupal = 'Drupal' in window,
 		consoleErrorDisplayed = false,
