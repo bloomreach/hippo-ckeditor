@@ -8,10 +8,6 @@
 		"ckeditor-textselection-plugin": "github:w8tcha/CKEditor-TextSelection-Plugin#42beb1fd401d292487bbde319086d3b662340589",
 		"ckeditor-wordcount-plugin": "1.17.10"
 	},
-	"engines": {
-		"node": ">=14",
-		"npm": ">=7"
-	},
 	"devDependencies": {
 		"benderjs": "^0.4.6",
 		"benderjs-coverage": "^0.2.2",
