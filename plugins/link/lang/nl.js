@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
 For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 CKEDITOR.plugins.setLang( 'link', 'nl', {
@@ -13,10 +13,11 @@ CKEDITOR.plugins.setLang( 'link', 'nl', {
 		title: 'Eigenschappen anker',
 		name: 'Naam anker',
 		errorName: 'Geef de naam van het anker op',
+		errorWhitespace: 'De naam van het anker kan geen spaties bevatten',
 		remove: 'Verwijder anker'
 	},
-	anchorId: 'ID van element',
-	anchorName: 'Naam anker',
+	anchorId: 'Op kenmerk interne link',
+	anchorName: 'Op naam interne link',
 	charset: 'Karakterset van gelinkte bron',
 	cssClasses: 'Stylesheet-klassen',
 	download: 'Download forceren',
@@ -32,7 +33,7 @@ CKEDITOR.plugins.setLang( 'link', 'nl', {
 	langDirRTL: 'Rechts naar links (RTL)',
 	menu: 'Link wijzigen',
 	name: 'Naam',
-	noAnchors: '(Geen ankers in tekst gevonden)',
+	noAnchors: '(Geen interne links in document gevonden)',
 	noEmail: 'Geef een e-mailadres',
 	noUrl: 'Geef de link van de URL',
 	noTel: 'Geef een telefoonnummer',
@@ -50,7 +51,7 @@ CKEDITOR.plugins.setLang( 'link', 'nl', {
 	popupToolbar: 'Werkbalk',
 	popupTop: 'Positie boven',
 	rel: 'Relatie',
-	selectAnchor: 'Kies een anker',
+	selectAnchor: 'Kies een interne link',
 	styles: 'Stijl',
 	tabIndex: 'Tabvolgorde',
 	target: 'Doelvenster',
