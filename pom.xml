@@ -101,8 +101,8 @@
                             <goal>install-node-and-npm</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>${nodejs.version}</nodeVersion>
-                            <npmVersion>${npm.version}</npmVersion>
+                            <nodeVersion>v16.20.2</nodeVersion>
+                            <npmVersion>8.19.4</npmVersion>
                         </configuration>
                     </execution>
                     <execution>
