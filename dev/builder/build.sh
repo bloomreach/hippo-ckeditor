@@ -82,6 +82,7 @@ printf "Copy external plugins from node_modules...\n"
 cp -r ../../node_modules/ckeditor-codemirror-plugin/codemirror ../../plugins/
 # Remove "elm" mode as it causes the ckbuilder.jar to crash
 rm -rf ../../plugins/codemirror/js/mode/elm
+rm -rf ../../dev/builder/release/ckeditor/.cache
 cp -r ../../node_modules/ckeditor-textselection-plugin/textselection ../../plugins/
 cp -r ../../node_modules/ckeditor-wordcount-plugin/wordcount ../../plugins/
 cp -r ../../node_modules/@bloomreach/hippo-ckeditor-youtube-plugin/youtube ../../plugins/
