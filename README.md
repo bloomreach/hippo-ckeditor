@@ -56,10 +56,20 @@ Update the version number of the project if necessary (e.g when moving from 4.9.
 ckeditor version in:
  - pom.xml
  - package-lock.json
- - the hippo-cms pom (located in a different git repository)
 
 Add new branch to:
  - Jenkinsfile
+
+### Release process
+
+Easiest to use the release plugin:
+
+	mvn release:prepare
+	mvn release:perform
+
+Prepare will ask for the release version and the next development version, and set a tag.
+Perform will deploy the tag to Maven2 Enterprise and push it to the remote.
+
 
 ### How to check CKEditor version in the browser
 
@@ -105,6 +115,7 @@ plugin (see that plugin's README) to the hippo npm registry and then bumping to 
 `package.json`.
 
 ## The remainder of this file contains the unmodified CKEditor README
+
 # CKEditor 4 - Smart WYSIWYG HTML editor [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20CKEditor%204%20on%20GitHub&url=https%3A%2F%2Fgithub.com%2Fckeditor%2Fckeditor4)
 # CKEditor 4 LTS - Smart WYSIWYG HTML editor [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20CKEditor%204%20on%20GitHub&url=https%3A%2F%2Fgithub.com%2Fckeditor%2Fckeditor4)
 
