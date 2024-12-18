@@ -17,7 +17,7 @@
     <name>Hippo CKEditor</name>
     <description>CKEditor for Bloomreach Content, f.k.a. Hippo CMS</description>
     <artifactId>hippo-ckeditor</artifactId>
-    <version>4.25.1-lts-h1-SNAPSHOT</version>
+    <version>4.25.0-lts-h2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
